@@ -6,85 +6,91 @@ import { NutritionProps } from '@/types';
 
 const nutrients = [
   {
-    name: 'Calories',
+    name: 'calories calory',
     code: 1,
     img: '/calories.png'
   }, {
-    name: 'Total Fat',
+    name: 'total Fat',
     code: 204,
     img: '/fat.png'
   }, {
-    name: 'Fatty acids, total trans',
+    name: 'fatty acids total trans',
     code: 605,
     img: '/fat.png'
   }, {
-    name: 'Fatty acids, total saturated',
+    name: 'fatty acids total saturated',
     code: 606,
     img: '/fat.png'
   }, {
-    name: 'Sugar',
+    name: 'sugar',
     code: 269,
     img: '/sugar.png'
   }, {
-    name: 'Sodium',
+    name: 'sodium salt',
     code: 307,
     img: '/sodium.png'
   }, {
-    name: 'Protein',
+    name: 'proteins',
     code: 203,
     img: '/protein.png'
   }, {
-    name: 'Carbohydrates',
+    name: 'carbohydrates',
     code: 205,
     img: '/carbohydrates.png'
   }, {
-    name: 'Fiber',
+    name: 'fibers',
     code: 291,
     img: '/fiber.png'
   }, {
-    name: 'Aditive',
+    name: 'aditives',
     code: 107,
     img: '/additives.png'
   }, {
-    name: 'Vitamin A',
+    name: 'vitamin a',
     code: 320,
     img: '/vitami-a.png'
   }, {
-    name: 'Vitamin C',
+    name: 'vitamin C',
     code: 401,
     img: '/vitamin-c.png'
   }, {
-    name: 'Calcium',
+    name: 'calciums',
     code: 301,
     img: '/calcium.png'
   }, {
-    name: 'Iron',
+    name: 'irons',
     code: 303,
     img: '/iron.png'
   }, {
-    name: 'Potassium',
+    name: 'potassiums',
     code: 306,
     img: '/potassium.png'
   }, {
-    name: 'Cholesterol',
+    name: 'cholesterols',
     code: 601,
     img: '/cholesterol.png'
   }, {
-    name: 'Vitamin A, IU',
+    name: 'vitamin a IU',
     code: 318,
     img: '/vitamin-a.png'
   }, {
-    name: 'Vitamin C',
+    name: 'vitamin c',
     code: 401,
     img: '/vitamin-c.png'
   }, {
-    name: 'Energy',
+    name: 'energy',
     code: 208,
     img: '/energy.png'
   }
 ]
-function getNutrientIconByCode(code: number): any {
+function getNutrientIconByCode(code: number): string {
   let nutrient = nutrients.find(nutrient => nutrient.code === code)
+  if (nutrient) return nutrient.img;
+  return '/no-image.webp';
+}
+
+function getNutrientIconByName(name: string): string {
+  let nutrient = nutrients.find(nutrient => nutrient.name.includes(name))
   if (nutrient) return nutrient.img;
   return '/no-image.webp';
 }
@@ -102,7 +108,7 @@ export function ShowNutritionFacts( {foodNutrients}: {foodNutrients: NutritionPr
             <div key={nutrient.id} className="flex flex-row gap-4 xitems-center border-b border-b-gray-600 last:border-b-0 p-4">
               <div>
               <Image
-                src={ getNutrientIconByCode( parseInt(nutrient.code) ) }
+                src={ nutrient.code && getNutrientIconByCode( parseInt(nutrient.code) ) || getNutrientIconByName( nutrient.name ) }
                 alt={ nutrient.name }
                 className='w-6 pt-2 grayscale'
                 width="24" height="24" />

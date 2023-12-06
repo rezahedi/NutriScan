@@ -77,7 +77,7 @@ export async function createNutritionObjectFromOpenFoodFacts(json: any): Promise
         nutritionObject.nutrients.push({
           id: ++nutrientsIdCounter,
           name: key,
-          code: key,
+          code: "",
           amount: limitDecimalPlaces( json.nutriments[key] || 0, 3),
           unitName: json.nutriments[key+"_unit"] || "",
         });
