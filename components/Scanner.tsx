@@ -60,7 +60,9 @@ export default function Scanner({ handleResult }) {
     
     const video = videoRef.current;
 
-    const barcodeDetector = new BarcodeDetector();
+    const barcodeDetector = new BarcodeDetector({
+      formats: ['upc_a', 'ean_8', 'ean_13']
+    });
     
     const myInterval = window.setInterval(async () => {
       const barcodes = await barcodeDetector.detect(video);

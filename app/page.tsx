@@ -55,10 +55,8 @@ export default function Home() {
             <input name="barcode" type='text' defaultValue={850126007120} placeholder='Enter a barcode' required className='p-4 border border-gray-300 rounded-lg w-full text-black' />
             <SubmitButton />
           </form>
-          <p>
-            {state?.message}
-          </p>
-          {state && state.foodNutrients && (
+          {state && state.message && <p>{state.message}</p>}
+          {state && state.id && (
             <ShowNutritionFacts foodNutrients={state} />
           )}
         </div>
