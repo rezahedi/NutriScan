@@ -29,7 +29,6 @@ export async function fetchFromOpenFoodFacts(barcode: string): Promise<any> {
     const result = await fetch(
       `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`
     );
-    console.log(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`);
     const data = await result.json();
     if(data.status === 0)
       return null;
@@ -94,9 +93,8 @@ export async function createNutritionObjectFromOpenFoodFacts(json: any): Promise
 export async function fetchFromUSDA(barcode: string): Promise<any> {
   try {
     const result = await fetch(
-      `https://api.nal.usda.gov/fdc/v1/foods/search?query=${barcode}&pageSize=1&api_key=GyHcFwTdyLtDHxblTEgzvGEOwN49UP7Y0jGGIhEs`
+      `https://api.nal.usda.gov/fdc/v1/foods/search?query=${barcode}&pageSize=1&api_key=${process.env.USDA_API_KEY}`
     );
-    console.log(`https://api.nal.usda.gov/fdc/v1/foods/search?query=${barcode}&pageSize=1&api_key=GyHcFwTdyLtDHxblTEgzvGEOwN49UP7Y0jGGIhEs`);
     const data = await result.json();
     if(data.foods.length === 0)
       return null;
