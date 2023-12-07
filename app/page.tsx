@@ -1,5 +1,5 @@
 "use client";
-
+import { useRef } from "react";
 import Image from 'next/image';
 import Link from 'next/link';
 // @ts-expect-error
@@ -23,6 +23,7 @@ function SubmitButton() {
 }
 
 export default function Home() {
+  const formRef = useRef(null);
   const [state, formAction] = useFormState(getNutrition, initialState)
   console.log(state)
 
@@ -31,8 +32,7 @@ export default function Home() {
     const barcodeInput = document.querySelector('input[name=barcode]')
     if (barcodeInput) {
       barcodeInput.value = barcode
-      // initiate form submission
-
+      formRef.current.requestSubmit();
     }
   }
 
@@ -50,8 +50,8 @@ export default function Home() {
             <Image src="/nutrition-facts-scanner-logo.svg" alt="logo" width="100" height="100" /></Link>
             <h1 className="text-4xl font-semibold">Nutrition Facts Scanner</h1>
           </nav>
-          <Scanner handleResult={setBarcode} />
-          <form action={formAction} className='flex flex-col items-center justify-center w-full'>
+          {!state.id && <Scanner handleResult={setBarcode} />}
+          <form action={formAction} ref={formRef} className='flex flex-col items-center justify-center w-full'>
             <input name="barcode" type='text' defaultValue={850126007120} placeholder='Enter a barcode' required className='p-4 border border-gray-300 rounded-lg w-full text-black' />
             <SubmitButton />
           </form>

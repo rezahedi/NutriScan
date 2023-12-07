@@ -1,12 +1,18 @@
 "use client";
 
-import { useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faClose } from '@fortawesome/free-solid-svg-icons'
 
 export default function Scanner({ handleResult }) {
 
   const videoRef = useRef(null);
+  const streamRef = useRef(null);
+  const [scannerStatus, setScannerStatus] = useState(true);
 
   useEffect(() => {
+    console.log('Scanner component:', status);
     if( videoRef!==null && videoRef.current!==null ){
       const initCamera = async () => {
         try {
@@ -24,12 +30,13 @@ export default function Scanner({ handleResult }) {
               }
             }
           );
+          streamRef.current = stream;
           videoRef.current.srcObject = stream;
           videoRef.current.play();
 
           // Log the dimensions of the video stream
           videoRef.current.onloadedmetadata = () => {
-            console.log('Video Dimensions:', videoRef.current.videoWidth, 'x', videoRef.current.videoHeight);
+            console.log('Video Dimensions:', videoRef.current.videoWidth, ' x ', videoRef.current.videoHeight);
         };
         } catch (error) {
           console.error('Error accessing camera:', error);
@@ -39,14 +46,30 @@ export default function Scanner({ handleResult }) {
   
       return () => {
         // Cleanup the camera stream when the component is unmounted
-        const stream = videoRef.current.srcObject;
-        if (stream) {
-          const tracks = stream.getTracks();
-          tracks.forEach((track) => track.stop());
+        if ( streamRef.current ) {
+          const tracks = streamRef.current.getTracks();
+          tracks.forEach( track => track.stop() );
         }
+        streamRef.current = null;
       };
     }
   }, []);
+
+  useEffect(() => {
+    if( videoRef!==null && videoRef.current!==null ){
+      if (scannerStatus) {
+        handleResult('');
+        videoRef.current.play();
+        handleBarcodeDetection();
+      } else {
+        // videoRef.current.pause();
+      }
+    }
+  }, [scannerStatus]);
+
+  const handleStatusChange = () => {
+    setScannerStatus(!scannerStatus);
+  }
 
   const handleBarcodeDetection = async () => {
   
@@ -74,12 +97,8 @@ export default function Scanner({ handleResult }) {
       // send result to parent
       handleResult(barcodes[0].rawValue);
       // Pause video and stop barcode detection interval
-      videoRef.current.pause();
+      handleStatusChange();
       clearInterval(myInterval);
-
-      console.log("Detected Barcode:", barcodes[0]);
-
-      console.log('#myCanvas dims:', myCanvas.width, myCanvas.height);
 
       // Clear prev drawing and draw new bounding box
       ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
@@ -134,6 +153,7 @@ barcodes[0].cornerPoints format:
         Your browser does not support the video tag.
       </video>
       <canvas id="myCanvas" className="absolute top-0 left-0" width={200} height={300}></canvas>
+      {!scannerStatus && <FontAwesomeIcon icon={faClose} className='absolute top-0 right-0 m-4 text-2xl text-white cursor-pointer' onClick={handleStatusChange} />}
     </div>
   )
 }
