@@ -62,7 +62,7 @@ export default function Scanner({ handleResult }) {
         videoRef.current.play();
         handleBarcodeDetection();
       } else {
-        // videoRef.current.pause();
+        videoRef.current.pause();
       }
     }
   }, [scannerStatus]);
