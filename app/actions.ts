@@ -2,12 +2,12 @@
 import { NutritionProps, Nutrient } from "@/types";
 
 
-export async function getNutrition(prevState: any, formData: FormData)
+export async function getNutrition(barcode: string): Promise<NutritionProps | null>
 {
   try {
-    const barcode = formData.get("barcode")?.toString() || null;
-    if(barcode === null)
-      throw new Error("Null barcode")
+    // Check if barcode all digits are numbers with 8 to 13 digits
+    if ( !/^\d{8,13}$/.test(barcode) )
+      throw new Error("Barcode format error: Please enter a valid barcode.")
 
     let res = await fetchFromOpenFoodFacts(barcode);
 
@@ -20,7 +20,7 @@ export async function getNutrition(prevState: any, formData: FormData)
     return res;
 
   } catch (error) {
-    return {message: "No result found!"};
+    return null;
   }
 }
 

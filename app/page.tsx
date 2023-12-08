@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Image from 'next/image';
 import Link from 'next/link';
 // @ts-expect-error
@@ -7,10 +7,7 @@ import {experimental_useFormState as useFormState, experimental_useFormStatus as
 import { getNutrition } from '@/app/actions';
 import { ShowNutritionFacts } from './components';
 import { Scanner } from '@/components';
-
-const initialState = {
-  message: null,
-}
+import { NutritionProps } from "@/types";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -23,17 +20,21 @@ function SubmitButton() {
 }
 
 export default function Home() {
-  const formRef = useRef(null);
-  const [state, formAction] = useFormState(getNutrition, initialState)
-  console.log(state)
+  const waitingState = 0,
+        loadingState = 1,
+        successState = 2;
+  const [state, setState] = useState( waitingState );
+  const [nutritionFacts, setNutritionFacts] = useState<null | NutritionProps>(null);
 
-  const setBarcode = (barcode: string) => {
-    // set barcode input value and submit form
-    const barcodeInput = document.querySelector('input[name=barcode]')
-    if (barcodeInput) {
-      barcodeInput.value = barcode
-      formRef.current.requestSubmit();
-    }
+  const handleDetectedBarcode = async (barcode: string) => {
+
+    setState(loadingState);
+    let result = await getNutrition(barcode);
+
+    setState(successState);
+    if ( result )
+      setNutritionFacts( result );
+
   }
 
   return (
@@ -48,17 +49,16 @@ export default function Home() {
           <nav className="flex items-center justify-between w-full">
             <Link href="/">
             <Image src="/nutrition-facts-scanner-logo.svg" alt="logo" width="100" height="100" /></Link>
-            <h1 className="text-4xl font-semibold">Nutrition Facts Scanner</h1>
+            <h1 className="text-2xl font-semibold">Nutrition Facts Scanner</h1>
           </nav>
-          {!state.id && <Scanner handleResult={setBarcode} />}
-          <form action={formAction} ref={formRef} className='flex flex-col items-center justify-center w-full'>
-            <input name="barcode" type='text' defaultValue={850126007120} placeholder='Enter a barcode' required className='p-4 border border-gray-300 rounded-lg w-full text-black' />
-            <SubmitButton />
-          </form>
-          {state && state.message && <p>{state.message}</p>}
-          {state && state.id && (
-            <ShowNutritionFacts foodNutrients={state} />
-          )}
+          <Scanner handleResult={handleDetectedBarcode} />
+          <div className="bg-white">
+            {state === loadingState && <p>Loading...</p>}
+            {state === successState && nutritionFacts === null && <p>Product does not Detected!</p>}
+            {state === successState && nutritionFacts && (
+              <ShowNutritionFacts foodNutrients={nutritionFacts} />
+            )}
+          </div>
         </div>
       </div>
     </div>
