@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { NutritionProps } from '@/types'
 
 export default function ProductCard( {product}: {product: NutritionProps} ) {
   return (
