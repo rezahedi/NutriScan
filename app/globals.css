@@ -2,19 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+
 :root {
-  --foreground: rgb(0, 0, 0);
-  --background: rgb(255, 255, 255);
+  --text: #1a0309;
+  --background: #fef9fb;
+  --primary: #931E1E;
+  --secondary: #ed5656;
+  --accent: #41c15a;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground: rgb(255, 255, 255);
-    --background: rgb(0, 0, 0);
+    --text: #fce4ea;
+    --background: #040102;
+    --primary: #e16b6b;
+    --secondary: #ab1212;
+    --accent: #3dbd57;
   }
 }
 
 body {
-  color: var(--foreground);
+  color: var(--text);
   background: var(--background);
 }

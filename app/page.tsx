@@ -34,7 +34,7 @@ export default function Home() {
         <h1 className="text-2xl font-semibold">Nutrition Facts Scanner</h1>
       </nav>
       <Scanner handleResult={handleDetectedBarcode} />
-      <div className="bg-white">
+      <div className="bg-neutral-800">
         {state === loadingState && <p>Loading...</p>}
         {state === successState && nutritionFacts === null && <p>Product does not Detected!</p>}
         {state === successState && nutritionFacts && (
