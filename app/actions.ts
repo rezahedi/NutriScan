@@ -1,5 +1,6 @@
 "use server";
 import { NutritionProps, Nutrient } from "@/types";
+import { limitDecimalPlaces } from "@/utils";
 
 
 export async function getNutrition(barcode: string): Promise<NutritionProps | null>
@@ -135,9 +136,4 @@ export async function createNutritionObjectFromUSDA(json: any): Promise<Nutritio
     console.error(error);
     return null;
   }
-}
-
-function limitDecimalPlaces(number: number, decimalPlaces: number): number {
-  const factorOfTen = Math.pow(10, decimalPlaces);
-  return Math.trunc(number * factorOfTen) / factorOfTen;
 }
