@@ -1,8 +1,45 @@
 import Image from 'next/image'
-import { Nutrient } from '@/types'
+import { NutrientProps } from '@/types'
+import { rateIndexColors, nutrientMetrics } from '@/constants'
+import { getRateIndex, getAmountInMilligrams, getPercentage } from '@/utils'
+
+export default function NutrientBar({nutrient}: {nutrient: NutrientProps}) {
+
+  // get access to nutrientMetric
+  const metricObject = nutrientMetrics.getNutrientMetric( nutrient.name );
+  if ( metricObject === null ) return null;
+  console.log( metricObject );
+
+  const nutrientMetric = nutrientMetrics.getNutrientMetric( nutrient.name );
+  if ( nutrientMetric === null ) return null;
+  const percentage = nutrientMetric.calc( getAmountInMilligrams( nutrient ) );
+  const rateIndex = getRateIndex(
+    percentage,
+    nutrientMetric
+  );
 
 
-export default function NutrientBar({nutrient}: {nutrient: Nutrient}) {
+  // This percentage used to locate the arrow in the bar
+  // TODO: This is not the best way to do it, but it works
+  // TODO: Refactor this
+  let benchmarkMax = metricObject.benchmarkPercentages[ metricObject.benchmarkPercentages.length-1 ];
+  const percentageofBarParts: number[] = [];
+  metricObject.benchmarkPercentages.map((value) => {
+    percentageofBarParts.push(
+      Math.round( (value / benchmarkMax) * 100 )
+    );
+  });
+  let percentageOfBar = Math.round( (percentage / benchmarkMax) * 100 );
+  percentageOfBar = percentageOfBar > 100 ? 100 : percentageOfBar;
+
+
+  // console.log(
+  //   nutrient.amount + nutrient.unitName,
+  //   getAmountInMilligrams( nutrient ) + "mg",
+  //   percentage + "% of 100g",
+  //   "Rate Index: " + rateIndex
+  // );
+  
   return (
     <div key={nutrient.id} className="flex flex-row gap-4 xitems-center border-b border-b-gray-600 last:border-b-0 p-4">
       <div>
@@ -16,29 +53,27 @@ export default function NutrientBar({nutrient}: {nutrient: Nutrient}) {
         <div className="flex flex-row justify-between">
           <div className='flex flex-col'>
             <p className="text-sm">{nutrient.name}</p>
-            <p className="text-xs font-light">A bit too much sodium</p>
+            <p className="text-xs font-light">{nutrientMetric.messages[rateIndex]}</p>
           </div>
           <div className='flex items-center gap-2 text-xs'>
             <p>{nutrient.amount} {nutrient.unitName}</p>
-            <div className='rounded-2xl w-4 h-4 bg-lime-600'></div>
+            <div className={`rounded-2xl w-4 h-4 bg-${rateIndexColors[rateIndex]}`}></div>
           </div>
         </div>
         <div className='group/detail h-0 overflow-hidden group-hover/item:h-9 transition-[height] ease-in-out delay-50'>
           <div className='relative h-4'>
-            <div className='text-xs absolute -ml-1.5 left-[30%] text-lime-500 animate-bounce'>▼</div>
+            <div style={{left:parseInt(percentageOfBar)+`%`}} className={`text-xs absolute -ml-1.5 text-${rateIndexColors[rateIndex]} animate-bounce`}>▼</div>
           </div>
           <div className='flex gap-[2px] h-1'>
-            <div className='bg-lime-800 w-1/4 h-full'></div>
-            <div className='bg-lime-500 w-1/4 h-full'></div>
-            <div className='bg-orange-500 w-1/4 h-full'></div>
-            <div className='bg-red-700 w-1/4 h-full'></div>
+            {rateIndexColors.map((color, index) => (
+              <div key={index} style={{width:percentageofBarParts[index]+'%'}} className={`bg-${color} w-1/4 h-full`}></div>
+            ))}
           </div>
           <div className='flex justify-between text-xs font-light'>
-            <div>0</div>
-            <div>2.7</div>
-            <div>5.4</div>
-            <div>9.3</div>
-            <div>14</div>
+            <div style={{width:percentageofBarParts[0]+'%'}}>0</div>
+            {metricObject.benchmarkPercentages.map((percentage, index) => (
+              <div key={index} style={{width:percentageofBarParts[index+1]+'%'}}>{percentage}</div>
+            ))}
           </div>
         </div>
       </div>
