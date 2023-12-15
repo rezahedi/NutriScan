@@ -1,5 +1,5 @@
 "use server";
-import { NutritionProps, Nutrient } from "@/types";
+import { NutritionProps, NutrientProps } from "@/types";
 import { limitDecimalPlaces } from "@/utils";
 
 
@@ -109,7 +109,7 @@ export async function fetchFromUSDA(barcode: string): Promise<any> {
 
 // Create a new nutrition object defined in @/Types from the JSON object returned by the USDA API
 export async function createNutritionObjectFromUSDA(json: any): Promise<NutritionProps | null> {
-  const createNutrient = (nutrient: any): Nutrient => ({
+  const createNutrient = (nutrient: any): NutrientProps => ({
     id: parseInt(nutrient.nutrientId || ""),
     name: nutrient.nutrientName || "",
     code: nutrient.nutrientNumber || "",

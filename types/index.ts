@@ -8,13 +8,21 @@ export interface NutritionProps {
   servingSize: number;
   servingSizeUnit: string;
   packageWeight: string;
-  nutrients: Nutrient[];
+  nutrients: NutrientProps[];
 }
 
-export interface Nutrient {
+export interface NutrientProps {
   id: number;
   name: string;
   code: string;
   amount: number;
   unitName: string;
+}
+
+export interface MetricProps {
+  messages: string[];
+  benchmarks: number[];
+  benchmarkPercentages: number[];
+  RDI: number;
+  calc: (value: number) => number;
 }
