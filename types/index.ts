@@ -20,9 +20,13 @@ export interface NutrientProps {
 }
 
 export interface MetricProps {
+  name: string;
+  img: string;
   messages: string[];
-  benchmarks: number[];
-  benchmarkPercentages: number[];
+  benchmarks_100g: number[];
+  benchmarks_unit: string;
+  benchmarks_ratio?: number[];
+  rates: number[],
   RDI: number;
   calc: (value: number) => number;
 }

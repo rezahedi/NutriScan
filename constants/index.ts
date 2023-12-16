@@ -1,5 +1,4 @@
 import { calculateSodium } from "@/utils";
-import { MetricProps } from "@/types";
 
 // ChatGPT: Reference Daily Intake (RDI): The Reference Daily Intake for sodium is often around 2,300 milligrams per day for adults.
 export const referenceDailyIntake = 1900; // mg
@@ -8,142 +7,169 @@ export const referenceDailyIntake = 1900; // mg
 // CAUTION: These numbers are not accurate, I got them from ChatGPT!
 // RDI is Reference Daily Intake
 export const nutrientMetrics = {
-  getNutrientMetric: (nutrientName: string): MetricProps | null => {
-    if( nutrientName.includes("sodium") )
-      return nutrientMetrics.sodium;
-    if( nutrientName.includes("sugar") )
-      return nutrientMetrics.sugar;
-    if( nutrientName.includes("fat") )
-      return nutrientMetrics.fat;
-    if( nutrientName.includes("saturated") )
-      return nutrientMetrics.saturatedFat;
-    if( nutrientName.includes("cholesterol") )
-      return nutrientMetrics.cholesterol;
-    if( nutrientName.includes("protein") )
-      return nutrientMetrics.protein;
-    if( nutrientName.includes("fiber") )
-      return nutrientMetrics.fiber;
-    if( nutrientName.includes("carbohydrates") )
-      return nutrientMetrics.carbohydrates;
-    if( nutrientName.includes("calories") )
-      return nutrientMetrics.calories;
-
-    return null;
-  },
-  sodium: {
+  'sodium':
+  {
+    name: "Sodium",
+    img: '/sodium.png',
     messages: [
-      "Heart-healthy, low salt.",
-      "Balanced sodium choice.",
-      "Approach with care.",
+      "Heart-healthy, low sodium",
+      "Balanced sodium choice",
+      "Approach with care",
       "Caution: salty dance party!"
     ],
-    benchmarks: [100, 300, 500, 800],
-    benchmarkPercentages: [0.5, 1.5, 3.5, 5.5],
+    benchmarks_100g: [180, 360, 630, 900],
+    benchmarks_unit: 'mg',
+    rates: [0, 1, 2, 3],
     RDI: 1900, // 2300 milligrams per day for adults. For a more conservative target, you can use 1500 milligrams per day
     calc: calculateSodium
   },
-  sugar: {
+  'salt':
+  {
+    name: "Salt",
+    img: '/sodium.png',
+    messages: [
+      "Low salt",
+      "Balanced salt choice",
+      "Approach with care",
+      "Caution: salty dance party!"
+    ],
+    benchmarks_100g: [0.46, 0.92, 1.62, 2.3],
+    benchmarks_unit: 'g',
+    rates: [0, 1, 2, 3],
+    RDI: 1900,
+    calc: calculateSodium
+  },
+  'sugars':
+  {
+    name: "Sugar",
+    img: '/sugar.png',
     messages: [
       "Sweet, not sugary.",
       "Moderate sweetness.",
       "Watch the sweet intake!",
       "Sugar overload, use caution!"
     ],
-    benchmarks: [2, 6, 12, 18],
-    benchmarkPercentages: [2.5, 5.5, 12.5, 20.5],
+    benchmarks_100g: [9, 18, 31, 45],
+    benchmarks_unit: 'g',
+    rates: [0, 1, 2, 3],
     RDI: 31, // 25 grams per day for women and 38 grams per day for men
     calc: calculateSodium
   },
-  fat: {
+  'saturated-fat':
+  {
+    name: "Saturated fat",
+    img: '/fat.png',
     messages: [
-      "Lean and mean, fat-free.",
-      "Balanced fat for joy.",
-      "Fat alert, consume wisely!",
-      "Fat fiesta, moderate fun!"
-    ],
-    benchmarks: [2, 5, 10, 15],
-    benchmarkPercentages: [2.5, 5.5, 12.5, 20.5],
-    RDI: 70, // 20% to 35% of total daily calories
-    calc: calculateSodium
-  },
-  saturatedFat: {
-    messages: [
-      "Saturated fat superstar!",
+      "Saturated fat superstar",
       "Balanced saturated fat choice.",
       "Saturated fat alert, check intake!",
-      "Overload, use with caution!"
+      "Fatty Overload, use with caution!"
     ],
-    benchmarks: [2, 5, 10, 15],
-    benchmarkPercentages: [0.5, 1.5, 3.5, 5.5],
+    benchmarks_100g: [2, 4, 7, 10],
+    benchmarks_unit: 'g',
+    benchmarks_ratio: [20, 35, 50, 70],
+    rates: [0, 1, 2, 3],
     RDI: 24, // 10% of total daily calories
     calc: calculateSodium
   },
-  cholesterol: {
+  'proteins':
+  {
+    name: "Protein",
+    img: '/protein.png',
     messages: [
-      "Heart-smart, low cholesterol.",
-      "Balanced, heart-friendly.",
-      "Cholesterol alert, be mindful!",
-      "Overloaded, handle with care!"
-    ],
-    benchmarks: [10, 30, 60, 100],
-    benchmarkPercentages: [0.5, 1.5, 3.5, 5.5],
-    RDI: 300, // Less than 300 milligrams per day for most adults
-    calc: calculateSodium
-  },
-  protein: {
-    messages: [
+      "Some protein",
       "Protein powerhouse!",
-      "Balanced protein source.",
-      "Protein alert, check intake!",
-      "Excessive protein, use caution!"
     ],
-    benchmarks: [5, 10, 20, 30],
-    benchmarkPercentages: [0.5, 1.5, 3.5, 5.5],
+     // good, very good
+    benchmarks_100g: [6.8, 14],
+    benchmarks_unit: 'g',
+    rates: [1, 0],
     RDI: 50, // 50 grams per day for most adults
     calc: calculateSodium
   },
-  fiber: {
+  'fiber':
+  {
+    name: "Fiber",
+    img: '/fiber.png',
     messages: [
-      "Fiber champion!",
       "Balanced fiber choice.",
-      "Fiber alert, check intake!",
-      "Low fiber, consider alternatives!"
+      "Fiber champion!",
     ],
-    benchmarks: [2, 5, 10, 15],
-    benchmarkPercentages: [0.5, 1.5, 3.5, 5.5],
+    benchmarks_100g: [3.5, 7],
+    benchmarks_unit: 'g',
+    rates: [1, 0],
     RDI: 31, // 25 grams per day for women and 38 grams per day for men
     calc: calculateSodium
   },
-  carbohydrates: {
-    messages: [
-      "Carb-conscious choice!",
-      "Moderate carb level.",
-      "Carb alert, be mindful!",
-      "Carb overload, use caution!"
-    ],
-    benchmarks: [10, 30, 60, 100],
-    benchmarkPercentages: [0.5, 1.5, 3.5, 5.5],
-    RDI: 130, // 130 grams per day
-    calc: calculateSodium
-  },
-  calories: {
+  'energy-kcal': {
+    name: "Calories",
+    img: '/calories.png',
     messages: [
       "Low-calorie delight!",
       "Moderate calorie content.",
       "Calorie alert, check intake!",
       "Calorie overload, use caution!"
     ],
-    benchmarks: [50, 100, 200, 300],
-    benchmarkPercentages: [2.5, 5.5, 12.5, 20.5],
+    benchmarks_100g: [160, 360, 560, 800], //Kcal but we show it as Cal
+    benchmarks_unit: 'KCal',
+    rates: [0, 1, 2, 3],
     RDI: 2000, // 2000 calories per day for adult women and 2500 calories per day for adult men
     calc: calculateSodium
   },
+  // vegetables: {
+  //   messages: [
+  //     "Good source of vegetables.",
+  //     "Excellent source of vegetables!",
+  //   ],
+  //   benchmarks_100g: [],
+  //   benchmarks_unit: '',
+  //   benchmarks_ratio: [80, 100],
+  //   rates: [1, 0],
+  //   RDI: 100, // 2.5 cups of vegetables per day for a 2,000-calorie diet
+  //   img: '',
+  //   calc: calculateSodium
+  // },
+  // fruits: {
+  //   messages: [
+  //     "Good source of fruits.",
+  //     "Excellent source of fruits!",
+  //   ],
+  //   benchmarks_100g: [],
+  //   benchmarks_unit: '',
+  //   benchmarks_ratio: [80, 100],
+  //   rates: [1, 0],
+  //   RDI: 100, // 2 cups of fruit per day for a 2,000-calorie diet
+  //   img: '',
+  //   calc: calculateSodium
+  // },
+  // nuts: {
+  //   messages: [
+  //     "Good source of nuts.",
+  //     "Excellent quantity!",
+  //   ],
+  //   benchmarks_100g: [],
+  //   benchmarks_unit: '',
+  //   benchmarks_ratio: [80, 100],
+  //   rates: [1, 0],
+  //   RDI: 100, // 2.5 cups of nuts per week for a 2,000-calorie diet
+  //   img: '',
+  //   calc: calculateSodium
+  // },
 };
 
 //! Whenever these colors are changed, also change them in tailwind config safelist!
 export const rateIndexColors = [
-  "lime-800",    // Very low:  Dark Green
-  "lime-500",    // Low:       Light Green
-  "orange-500",  // High:      Orange
-  "red-700"      // Very High: Red
+  "#3F620D",    // Very low:  Dark Green
+  "#84CC16",    // Low:       Light Green
+  "#F97316",    // High:      Orange
+  "#B91C1C"     // Very High: Red
 ];
+
+export const USDAGovCodeToOFFOrgKeyword = {
+  "307": "sodium",
+  "539": "sugars",
+  "606": "saturated-fat",
+  "203": "proteins",
+  "291": "fiber",
+  "208": "energy-kcal",
+}

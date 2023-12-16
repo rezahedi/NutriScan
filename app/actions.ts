@@ -1,6 +1,7 @@
 "use server";
 import { NutritionProps, NutrientProps } from "@/types";
 import { limitDecimalPlaces } from "@/utils";
+import { USDAGovCodeToOFFOrgKeyword } from "@/constants";
 
 
 export async function getNutrition(barcode: string): Promise<NutritionProps | null>
@@ -72,7 +73,7 @@ export async function createNutritionObjectFromOpenFoodFacts(json: any): Promise
 
     let nutrientsIdCounter = 0;
     Object.keys(json.nutriments).filter((key) => {
-      if ( !/[-_]/.test(key) )
+      if ( !/[_]/.test(key) )
       {
         nutritionObject.nutrients.push({
           id: ++nutrientsIdCounter,
@@ -111,7 +112,7 @@ export async function fetchFromUSDA(barcode: string): Promise<any> {
 export async function createNutritionObjectFromUSDA(json: any): Promise<NutritionProps | null> {
   const createNutrient = (nutrient: any): NutrientProps => ({
     id: parseInt(nutrient.nutrientId || ""),
-    name: nutrient.nutrientName || "",
+    name: USDAGovCodeToOFFOrgKeyword[ nutrient.nutrientNumber ] || nutrient.nutrientName || "",
     code: nutrient.nutrientNumber || "",
     amount: limitDecimalPlaces( parseFloat(nutrient.value || ""), 3 ),
     unitName: nutrient.unitName || "",
