@@ -1,23 +1,10 @@
-import { MetricProps } from '@/types';
+import { MetricProps, NutrientProps } from '@/types';
+import { nutrientMetrics, rateIndexColors } from '@/constants';
+
 
 export const limitDecimalPlaces = (value: number, decimalLimit: number) : number => {
   const factorOfTen = Math.pow(10, decimalLimit);
   return Math.round(value * factorOfTen) / factorOfTen;
-}
-
-/**
- * @param amount is the percentage of the nutrient in the food
- * @param metric is the constant metric object for the nutrient including the benchmark percentages and messages
- * @returns the index of the benchmark and it's 0 - 3
- */
-export const getRateIndex = (amount: number, metric: MetricProps) => {
-
-  const { benchmarks_100g } = metric;
-  let index = benchmarks_100g.findIndex( (benchmark) => amount <= benchmark );
-
-  return index !== -1
-    ? index
-    : benchmarks_100g.length - 1;
 }
 
 export const getPercentage = (amount: number, max: number) => {
@@ -38,17 +25,75 @@ export const convertMetric = (amount: number, fromUnit: string, toUnit: string) 
   return amount;
 }
 
-export const getBarParts = (metric: MetricProps) => {
+/**
+ * 1: Verify raw data from API
+**/
+export const verifyNutrient = (nutrient: NutrientProps) : MetricProps | null => {
+
+  // Check values
+  if ( nutrient.unitName === '' && nutrient.name === '' )
+    return null;
+
+  // Verify if nutrient is available in nutrientMetrics constant
+  const metric = nutrientMetrics[nutrient.name] || null;
+  if ( metric === null )
+    return null;
+
+  return metric;
+}
+
+/**
+ * 2: Rate the nutrient
+ * @param amount is the percentage of the nutrient in the food
+ * @param metric is the constant metric object for the nutrient including the benchmark percentages and messages
+ * @returns the index of the benchmark and it's 0 - 3
+ */
+export const getRateIndex = (amount: number, metric: MetricProps) : number => {
+
+  const { benchmarks_100g } = metric;
+  let index = benchmarks_100g.findIndex( (benchmark) => amount <= benchmark );
+
+  return index !== -1
+    ? index
+    : benchmarks_100g.length - 1;
+}
+
+/**
+ * 3: Get nutrient Bar UI values
+ */
+export const getBarUIDetails = (
+  amount: number, rateIndex: number, metric: MetricProps
+) : {
+  color: string, arrowLeft: string, barPartsWidth: string[], moreThanLargestBenchmark: boolean
+} => {
+
+  // Set color of the rate
+  let color = rateIndexColors[ metric.rates[ rateIndex ] ];
+
+  // Calculate benchmark's bars width in percentage
+  let barPartsWidth = getBarPartsWidth(metric);
+
+  // Get the left position of the arrow
+  let arrowLeft = Math.round( (amount / metric.benchmarks_100g[ metric.benchmarks_100g.length - 1 ]) * 100 );
+  let moreThanLargestBenchmark = false;
+  if ( arrowLeft > 100 ) {
+    arrowLeft = 100;
+    moreThanLargestBenchmark = true;
+  }
+
+  return { color, arrowLeft: `${arrowLeft}%`, barPartsWidth, moreThanLargestBenchmark }
+}
+
+export const getBarPartsWidth = (metric: MetricProps) : string[] => {
   let { benchmarks_100g } = metric;
-  let widthInPercentages: number[] = [];
+  let widthInPercentages: string[] = [];
 
   let largestBenchmark = benchmarks_100g[ benchmarks_100g.length - 1 ];
   let previousBenchmark = 0;
 
   benchmarks_100g.map((benchmark) => {
-    widthInPercentages.push(
-      Math.round( ((benchmark - previousBenchmark) / largestBenchmark) * 100 )
-    );
+    let width = Math.round( ((benchmark - previousBenchmark) / largestBenchmark) * 100 );
+    widthInPercentages.push( `${width}%` );
     previousBenchmark = benchmark;
   });
 
