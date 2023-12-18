@@ -29,14 +29,14 @@ export const getPercentage = (amount: number, max: number) => {
 }
 
 // Convert grams to milligrams and vice versa
-export const convertMetric = (amount: number, unit: string, toUnit: string) => {
-  if(unit === toUnit)
+export const convertMetric = (amount: number, fromUnit: string, toUnit: string) => {
+  if(fromUnit === toUnit)
     return amount;
 
-  if(unit === 'g' && toUnit === 'mg')
+  if(fromUnit === 'g' && toUnit === 'mg')
     return amount * 1000;
 
-  if(unit === 'mg' && toUnit === 'g')
+  if(fromUnit === 'mg' && toUnit === 'g')
     return amount / 1000;
 
   return amount;
