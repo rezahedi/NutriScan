@@ -52,7 +52,7 @@ export default function NutrientBar({nutrient}: {nutrient: NutrientProps}) {
             {metric.benchmarks_100g.map((benchmark, index) => (
               <div key={index} style={{
                   width: ui.barPartsWidth[index]
-                }} className='text-right'>{benchmark}</div>
+                }} className='text-right'>{ui.moreThanLargestBenchmark && index===metric.benchmarks_100g.length-1 && `+`}{benchmark}</div>
             ))}
           </div>
         </div>
