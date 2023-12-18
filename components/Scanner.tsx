@@ -121,7 +121,7 @@ export default function Scanner({ handleResult }) {
 
   if ( !isBarcodeDetectorAvailable() ) {
     return (
-      <div className="w-full h-full flex flex-col justify-center items-center">
+      <div className="w-full h-1/2 flex flex-col justify-center items-center">
         <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Barcode_Detection_API"><u>Barcode Detector API</u></a> is not supported by your <a href="https://caniuse.com/mdn-api_barcodedetector"><u>browsers</u></a>!</p>
         <p>Please open this page in your mobile browser.</p>
       </div>
