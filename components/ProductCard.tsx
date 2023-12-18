@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { NutritionProps } from '@/types'
 import { NutrientBar } from '@/components';
 
-export default function ProductCard( {product, showNutrients=false, children}: {product: NutritionProps, showNutrients?: boolean, children?: React.ReactNode} ) {
+export default function ProductCard( {product, showNutrients=false}: {product: NutritionProps, showNutrients?: boolean} ) {
   return (
     <>
       <div className="flex gap-4 items-start">
