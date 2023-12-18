@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from 'next/image';
 import Link from 'next/link';
 import { getNutrition } from '@/app/actions';
-import { DeviceFrame, Scanner, NutritionFacts, ProductCard } from '@/components';
+import { DeviceFrame, Scanner, ProductCard } from '@/components';
 import { NutritionProps } from "@/types";
 
 
@@ -25,6 +25,10 @@ export default function Home() {
 
   }
 
+  useEffect(() => {
+    handleDetectedBarcode('0186852001478');
+  }, []);
+
   return (
     <DeviceFrame>
       <nav className="flex items-center justify-between w-full">
@@ -38,7 +42,7 @@ export default function Home() {
         {state === loadingState && <p>Loading...</p>}
         {state === successState && nutritionFacts === null && <p>Product does not Detected!</p>}
         {state === successState && nutritionFacts && (
-          <NutritionFacts foodNutrients={nutritionFacts} />
+          <ProductCard product={nutritionFacts} showNutrients={true} />
         )}
       </div>
     </DeviceFrame>
