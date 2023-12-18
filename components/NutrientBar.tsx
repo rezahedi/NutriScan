@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { MetricProps, NutrientProps } from '@/types'
 import { rateIndexColors, nutrientMetrics } from '@/constants'
-import { getRateIndex, convertMetric, getBarParts } from '@/utils'
+import { limitDecimalPlaces, getRateIndex, convertMetric, getBarParts } from '@/utils'
 
 export default function NutrientBar({nutrient}: {nutrient: NutrientProps}) {
 
@@ -47,7 +47,7 @@ export default function NutrientBar({nutrient}: {nutrient: NutrientProps}) {
             <p className="text-xs font-light">{metric.messages[rateIndex]}</p>
           </div>
           <div className='flex items-center gap-2 text-xs'>
-            <p>{amount} {metric.benchmarks_unit}</p>
+            <p>{limitDecimalPlaces(amount, 1)} {metric.benchmarks_unit}</p>
             <div style={{
                 left:`${arrowLocationInBar}%`,
                 backgroundColor: `${rateColor}`
