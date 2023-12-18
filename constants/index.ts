@@ -92,7 +92,7 @@ export const nutrientMetrics = {
     name: "Fiber",
     img: '/fiber.png',
     messages: [
-      "Balanced fiber choice.",
+      "Some fiber",
       "Fiber champion!",
     ],
     benchmarks_100g: [3.5, 7],
@@ -111,7 +111,7 @@ export const nutrientMetrics = {
       "Calorie overload, use caution!"
     ],
     benchmarks_100g: [160, 360, 560, 800], //Kcal but we show it as Cal
-    benchmarks_unit: 'KCal',
+    benchmarks_unit: 'Cal',
     rates: [0, 1, 2, 3],
     RDI: 2000, // 2000 calories per day for adult women and 2500 calories per day for adult men
     calc: calculateSodium
