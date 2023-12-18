@@ -1,6 +1,5 @@
 "use server";
 import { NutritionProps, NutrientProps } from "@/types";
-import { limitDecimalPlaces } from "@/utils";
 import { USDAGovCodeToOFFOrgKeyword } from "@/constants";
 
 
@@ -79,7 +78,7 @@ export async function createNutritionObjectFromOpenFoodFacts(json: any): Promise
           id: ++nutrientsIdCounter,
           name: key,
           code: "",
-          amount: limitDecimalPlaces( json.nutriments[key] || 0, 3),
+          amount: json.nutriments[key] || 0,
           unitName: json.nutriments[key+"_unit"] || "",
         });
       }
@@ -114,7 +113,7 @@ export async function createNutritionObjectFromUSDA(json: any): Promise<Nutritio
     id: parseInt(nutrient.nutrientId || ""),
     name: USDAGovCodeToOFFOrgKeyword[ nutrient.nutrientNumber ] || nutrient.nutrientName || "",
     code: nutrient.nutrientNumber || "",
-    amount: limitDecimalPlaces( parseFloat(nutrient.value || ""), 3 ),
+    amount: parseFloat(nutrient.value || ""),
     unitName: nutrient.unitName || "",
   });
 
