@@ -27,6 +27,4 @@ export interface MetricProps {
   benchmarks_unit: string;
   benchmarks_ratio?: number[];
   rates: number[],
-  RDI: number;
-  calc: (value: number) => number;
 }

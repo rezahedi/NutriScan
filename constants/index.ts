@@ -1,8 +1,3 @@
-import { calculateSodium } from "@/utils";
-
-// ChatGPT: Reference Daily Intake (RDI): The Reference Daily Intake for sodium is often around 2,300 milligrams per day for adults.
-export const referenceDailyIntake = 1900; // mg
-
 // Nutrient rate levels in milligrams: (Very low, low, moderate, high, very high)
 // CAUTION: These numbers are not accurate, I got them from ChatGPT!
 // RDI is Reference Daily Intake
@@ -20,8 +15,6 @@ export const nutrientMetrics = {
     benchmarks_100g: [180, 360, 630, 900],
     benchmarks_unit: 'mg',
     rates: [0, 1, 2, 3],
-    RDI: 1900, // 2300 milligrams per day for adults. For a more conservative target, you can use 1500 milligrams per day
-    calc: calculateSodium
   },
   'salt':
   {
@@ -36,8 +29,6 @@ export const nutrientMetrics = {
     benchmarks_100g: [0.46, 0.92, 1.62, 2.3],
     benchmarks_unit: 'g',
     rates: [0, 1, 2, 3],
-    RDI: 1900,
-    calc: calculateSodium
   },
   'sugars':
   {
@@ -52,8 +43,6 @@ export const nutrientMetrics = {
     benchmarks_100g: [9, 18, 31, 45],
     benchmarks_unit: 'g',
     rates: [0, 1, 2, 3],
-    RDI: 31, // 25 grams per day for women and 38 grams per day for men
-    calc: calculateSodium
   },
   'saturated-fat':
   {
@@ -69,8 +58,6 @@ export const nutrientMetrics = {
     benchmarks_unit: 'g',
     benchmarks_ratio: [20, 35, 50, 70],
     rates: [0, 1, 2, 3],
-    RDI: 24, // 10% of total daily calories
-    calc: calculateSodium
   },
   'proteins':
   {
@@ -84,8 +71,6 @@ export const nutrientMetrics = {
     benchmarks_100g: [6.8, 14],
     benchmarks_unit: 'g',
     rates: [1, 0],
-    RDI: 50, // 50 grams per day for most adults
-    calc: calculateSodium
   },
   'fiber':
   {
@@ -98,8 +83,6 @@ export const nutrientMetrics = {
     benchmarks_100g: [3.5, 7],
     benchmarks_unit: 'g',
     rates: [1, 0],
-    RDI: 31, // 25 grams per day for women and 38 grams per day for men
-    calc: calculateSodium
   },
   'energy-kcal': {
     name: "Calories",
@@ -113,8 +96,6 @@ export const nutrientMetrics = {
     benchmarks_100g: [160, 360, 560, 800], //Kcal but we show it as Cal
     benchmarks_unit: 'Cal',
     rates: [0, 1, 2, 3],
-    RDI: 2000, // 2000 calories per day for adult women and 2500 calories per day for adult men
-    calc: calculateSodium
   },
   // vegetables: {
   //   messages: [
@@ -125,9 +106,7 @@ export const nutrientMetrics = {
   //   benchmarks_unit: '',
   //   benchmarks_ratio: [80, 100],
   //   rates: [1, 0],
-  //   RDI: 100, // 2.5 cups of vegetables per day for a 2,000-calorie diet
   //   img: '',
-  //   calc: calculateSodium
   // },
   // fruits: {
   //   messages: [
@@ -138,9 +117,7 @@ export const nutrientMetrics = {
   //   benchmarks_unit: '',
   //   benchmarks_ratio: [80, 100],
   //   rates: [1, 0],
-  //   RDI: 100, // 2 cups of fruit per day for a 2,000-calorie diet
   //   img: '',
-  //   calc: calculateSodium
   // },
   // nuts: {
   //   messages: [
@@ -151,9 +128,7 @@ export const nutrientMetrics = {
   //   benchmarks_unit: '',
   //   benchmarks_ratio: [80, 100],
   //   rates: [1, 0],
-  //   RDI: 100, // 2.5 cups of nuts per week for a 2,000-calorie diet
   //   img: '',
-  //   calc: calculateSodium
   // },
 };
 

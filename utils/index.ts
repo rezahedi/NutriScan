@@ -1,12 +1,8 @@
-import { NutrientProps, MetricProps } from '@/types';
+import { MetricProps } from '@/types';
 
 export function limitDecimalPlaces(value: number, decimalLimit: number): number {
   const factorOfTen = Math.pow(10, decimalLimit);
   return Math.round(value * factorOfTen) / factorOfTen;
-}
-
-export const calculateSodium = (sodiumInMilligrams: number) => {
-  return sodiumInMilligrams * 100 / 100000;
 }
 
 /**
