@@ -10,19 +10,22 @@ import { NutritionProps } from "@/types";
 export default function Home() {
   const waitingState = 0,
         loadingState = 1,
-        successState = 2;
+        errorState = 2,
+        successState = 3;
   const [state, setState] = useState( waitingState );
   const [nutritionFacts, setNutritionFacts] = useState<null | NutritionProps>(null);
 
-  const handleDetectedBarcode = async (barcode: string) => {
-
+  const handleDetectedBarcode = async (barcode: string) =>
+  {
     setState(loadingState);
     let result = await getNutrition(barcode);
 
-    setState(successState);
-    if ( result )
+    if ( result !== null ) {
       setNutritionFacts( result );
-
+      setState(successState);
+    } else {
+      setState(errorState);
+    }
   }
 
   useEffect(() => {
@@ -39,8 +42,9 @@ export default function Home() {
       </nav>
       <Scanner handleResult={handleDetectedBarcode} />
       <div className="bg-background">
+        {state === waitingState && <p>Scanning...</p>}
         {state === loadingState && <p>Loading...</p>}
-        {state === successState && nutritionFacts === null && <p>Product does not Detected!</p>}
+        {state === errorState && <p>Product does not Detected!</p>}
         {state === successState && nutritionFacts && (
           <ProductCard product={nutritionFacts} showNutrients={true} />
         )}

@@ -62,13 +62,19 @@ export const getRateIndex = (amount: number, metric: MetricProps) : number => {
  * 3: Get nutrient Bar UI values
  */
 export const getBarUIDetails = (
-  amount: number, rateIndex: number, metric: MetricProps
+  amount: number, ratedIndex: number, metric: MetricProps
 ) : {
-  color: string, arrowLeft: string, barPartsWidth: string[], moreThanLargestBenchmark: boolean
+  message: string,
+  color: string,
+  arrowLeft: string,
+  barPartsWidth: string[],
+  moreThanLargestBenchmark: boolean
 } => {
 
+  // Get message
+  let message = metric.messages[ ratedIndex ];
   // Set color of the rate
-  let color = rateIndexColors[ metric.rates[ rateIndex ] ];
+  let color = rateIndexColors[ metric.rates[ ratedIndex ] ];
 
   // Calculate benchmark's bars width in percentage
   let barPartsWidth = getBarPartsWidth(metric);
@@ -81,7 +87,7 @@ export const getBarUIDetails = (
     moreThanLargestBenchmark = true;
   }
 
-  return { color, arrowLeft: `${arrowLeft}%`, barPartsWidth, moreThanLargestBenchmark }
+  return { message, color, arrowLeft: `${arrowLeft}%`, barPartsWidth, moreThanLargestBenchmark }
 }
 
 export const getBarPartsWidth = (metric: MetricProps) : string[] => {

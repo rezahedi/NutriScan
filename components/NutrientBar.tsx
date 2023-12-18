@@ -1,25 +1,17 @@
 import Image from 'next/image'
 import { NutrientProps } from '@/types'
 import { rateIndexColors } from '@/constants'
-import { limitDecimalPlaces, getRateIndex, convertMetric, verifyNutrient, getBarUIDetails } from '@/utils'
+import { limitDecimalPlaces, getBarUIDetails } from '@/utils'
 
 export default function NutrientBar({nutrient}: {nutrient: NutrientProps}) {
 
-  // Verify and get nutrient metric object
-  const metric = verifyNutrient(nutrient);
-  if ( metric === null ) return null;
-
-  // Convert nutrient amount to match the benchmarks' unit
-  const amount = convertMetric( nutrient.amount, nutrient.unitName, metric.benchmarks_unit );
-
-  // Find the rate's index of nutrient amount
-  const rateIndex = getRateIndex( amount, metric );
+  const { metric, amount, ratedIndex } = nutrient;
 
   // Get UI details
-  const ui = getBarUIDetails( amount, rateIndex , metric);
+  const ui = getBarUIDetails( amount, ratedIndex , metric);
 
   return (
-    <div key={nutrient.id} className="flex flex-row gap-4 xitems-center border-b border-b-gray-600 last:border-b-0 p-4">
+    <div key={nutrient.id} className="flex flex-row gap-4 border-b border-b-gray-600 last:border-b-0 py-4">
       <div>
       <Image
         src={ metric.img }
@@ -31,7 +23,7 @@ export default function NutrientBar({nutrient}: {nutrient: NutrientProps}) {
         <div className="flex flex-row justify-between">
           <div className='flex flex-col'>
             <p className="text-sm">{metric.name}</p>
-            <p className="text-xs font-light">{metric.messages[rateIndex]}</p>
+            <p className="text-xs font-light">{ui.message}</p>
           </div>
           <div className='flex items-center gap-2 text-xs'>
             <p>{limitDecimalPlaces(amount, 1)} {metric.benchmarks_unit}</p>
@@ -48,10 +40,10 @@ export default function NutrientBar({nutrient}: {nutrient: NutrientProps}) {
               }} className='text-xs absolute -ml-1.5 animate-bounce'>▼</div>
           </div>
           <div className='flex gap-[2px] h-1'>
-            {metric.benchmarks_100g.map((value, index) => (
+            {metric.rates.map((rate, index) => (
               <div key={index} style={{
                   width: ui.barPartsWidth[index],
-                  backgroundColor: rateIndexColors[metric.rates[index]]
+                  backgroundColor: rateIndexColors[rate]
                 }} className='w-1/4 h-full'></div>
             ))}
           </div>

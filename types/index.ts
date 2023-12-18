@@ -17,6 +17,9 @@ export interface NutrientProps {
   code: string;
   amount: number;
   unitName: string;
+  rate?: number;
+  ratedIndex?: number;
+  metric?: MetricProps;
 }
 
 export interface MetricProps {

@@ -1,8 +1,50 @@
+import { useEffect, useState } from 'react';
 import Image from 'next/image'
-import { NutritionProps } from '@/types'
-import { NutrientBar } from '@/components';
+import { NutrientProps, NutritionProps } from '@/types'
+import { convertMetric, getRateIndex, verifyNutrient } from '@/utils';
+import NutrientBundle from './NutrientBundle';
 
 export default function ProductCard( {product, showNutrients=false}: {product: NutritionProps, showNutrients?: boolean} ) {
+
+  const [negativeNutrients, setnegativeNutrients] = useState<NutrientProps[] | null>(null);
+  const [positiveNutrients, setpositiveNutrients] = useState<NutrientProps[] | null>(null);
+
+  useEffect(() => {
+    if ( !product.nutrients ) return;
+    if ( negativeNutrients !== null || positiveNutrients !== null ) return;
+
+    const { nutrients } = product;
+    const analyzedNutrients: NutrientProps[] = [];
+  
+    // 1. Get rates of nutrients
+    nutrients.forEach((nutrient) => {
+      // Verify and get nutrient metric object
+      let metric = verifyNutrient(nutrient);
+      if ( metric === null ) return;
+  
+      nutrient.metric = metric;
+  
+      // Convert nutrient amount to match the benchmarks' unit
+      nutrient.amount = convertMetric( nutrient.amount, nutrient.unitName, nutrient.metric.benchmarks_unit );
+      nutrient.unitName = nutrient.metric.benchmarks_unit;
+  
+      // Find the rate's index of nutrient amount
+      nutrient.ratedIndex = getRateIndex( nutrient.amount, nutrient.metric );
+      nutrient.rate = nutrient.metric.rates[ nutrient.ratedIndex ];
+  
+      analyzedNutrients.push( nutrient );
+    });
+  
+    // 2. Sort nutrients by rate (Negative to Positive)
+    analyzedNutrients.sort((a, b) => b.rate - a.rate );
+
+    // 3. Separate negatives and positives (positive to negative => 0, 1, 2, 3)
+    setnegativeNutrients( analyzedNutrients.filter((nutrient) => nutrient.rate >= 2) );
+    setpositiveNutrients( analyzedNutrients.filter((nutrient) => nutrient.rate < 2) );
+    // product.nutrients = analyzedNutrients;
+  }, []);  
+
+
   return (
     <>
       <div className="flex gap-4 items-start">
@@ -16,19 +58,10 @@ export default function ProductCard( {product, showNutrients=false}: {product: N
         </div>
       </div>
       {showNutrients && (
-        <div className="py-4">
-          <div className='flex justify-between items-center'>
-            <h3 className='font-medium text-lg'>Negatives</h3>
-            <div className='text-neutral-400'>Per 100g</div>
-          </div>
-          {product.nutrients.map((nutrient) => {
-            // if(nutrient.amount === 0) return;
-
-            return (
-              <NutrientBar key={nutrient.id} nutrient={nutrient} />
-            );
-          })}
-        </div>
+        <>
+          {negativeNutrients && <NutrientBundle title='Negatives' nutrients={negativeNutrients} />}
+          {positiveNutrients && <NutrientBundle title='Positives' nutrients={positiveNutrients} />}
+        </>
       )}
     </>
   )
