@@ -7,6 +7,8 @@ export default function NutrientBar({nutrient}: {nutrient: NutrientProps}) {
 
   const { metric, amount, ratedIndex } = nutrient;
 
+  if( ratedIndex === undefined || metric === undefined ) return;
+
   // Get UI details
   const ui = getBarUIDetails( amount, ratedIndex , metric);
 
