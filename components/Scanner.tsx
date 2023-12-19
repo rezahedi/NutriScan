@@ -72,7 +72,7 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
     canvasRef.current.width = videoWidth;
     canvasRef.current.height = videoHeight;
 
-    // if("BarcodeDetector" in window === false) return;
+    if("BarcodeDetector" in window === false) return;
     const barcodeDetector = new (window as any).BarcodeDetector({
       formats: ['upc_a', 'ean_8', 'ean_13']
     });
@@ -110,14 +110,14 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
   };
 
 
-  if ( !isBarcodeDetectorAvailable() ) {
-    return (
-      <div className="w-full h-1/2 flex flex-col justify-center items-center">
-        <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Barcode_Detection_API"><u>Barcode Detector API</u></a> is not supported by your <a href="https://caniuse.com/mdn-api_barcodedetector"><u>browsers</u></a>!</p>
-        <p>Please open this page in your mobile browser.</p>
-      </div>
-    )
-  }
+  // if ( !isBarcodeDetectorAvailable() ) {
+  //   return (
+  //     <div className="w-full h-1/2 flex flex-col justify-center items-center">
+  //       <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Barcode_Detection_API"><u>Barcode Detector API</u></a> is not supported by your <a href="https://caniuse.com/mdn-api_barcodedetector"><u>browsers</u></a>!</p>
+  //       <p>Please open this page in your mobile browser.</p>
+  //     </div>
+  //   )
+  // }
 
   return (
     <div ref={frameRef} className="relative w-full h-2/4">
@@ -130,6 +130,6 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
   )
 }
 
-export function isBarcodeDetectorAvailable(){
-  return (typeof window !== undefined && "BarcodeDetector" in window);
-};
+// export function isBarcodeDetectorAvailable(){
+//   return (typeof window !== undefined && "BarcodeDetector" in window);
+// };
