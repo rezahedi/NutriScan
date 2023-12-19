@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClose } from '@fortawesome/free-solid-svg-icons'
@@ -12,14 +12,20 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
   const streamRef = useRef<MediaStream | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [status, setStatus] = useState(true);
+  const [barcodeDetectorSupported, setBarcodeDetectorSupported] = useState(true);
+
+  useEffect(() => {
+    if( !isBarcodeDetectorAvailable() )
+      setBarcodeDetectorSupported(false);
+  }, [barcodeDetectorSupported]);
 
   useEffect(() => {
     (async () => {
       if( videoRef!==null && videoRef.current!==null ){
         if ( status && typeof window !== 'undefined' ) {
-          console.log('window', window);
           await startStream();
-          handleBarcodeDetection();
+          if( isBarcodeDetectorAvailable() )
+            runBarcodeDetection();
         } else {
           stopStream();
         }
@@ -58,11 +64,8 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
     }
   }
 
-  const handleBarcodeDetection = () => {
+  const runBarcodeDetection = () => {
 
-    if (typeof window === 'undefined') return;
-    console.log('handleBarcodeDetection', window)
-  
     if(canvasRef.current===null || videoRef.current===null) return;
 
     const ctx = canvasRef.current.getContext("2d");
@@ -72,7 +75,6 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
     canvasRef.current.width = videoWidth;
     canvasRef.current.height = videoHeight;
 
-    if("BarcodeDetector" in window === false) return;
     const barcodeDetector = new (window as any).BarcodeDetector({
       formats: ['upc_a', 'ean_8', 'ean_13']
     });
@@ -110,15 +112,6 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
   };
 
 
-  // if ( !isBarcodeDetectorAvailable() ) {
-  //   return (
-  //     <div className="w-full h-1/2 flex flex-col justify-center items-center">
-  //       <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Barcode_Detection_API"><u>Barcode Detector API</u></a> is not supported by your <a href="https://caniuse.com/mdn-api_barcodedetector"><u>browsers</u></a>!</p>
-  //       <p>Please open this page in your mobile browser.</p>
-  //     </div>
-  //   )
-  // }
-
   return (
     <div ref={frameRef} className="relative w-full h-2/4">
       <video className="w-full h-full" ref={videoRef} onLoadedMetadata={()=>setStatus(true)}>
@@ -126,10 +119,19 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
       </video>
       <canvas id="myCanvas" ref={canvasRef} className="absolute top-0 left-0" width={200} height={300}></canvas>
       {!status && <FontAwesomeIcon icon={faClose} className='absolute top-0 right-0 m-4 text-2xl text-white cursor-pointer' onClick={()=>setStatus(true)} />}
+      {!barcodeDetectorSupported &&
+        <div className="absolute top-0 left-0 w-full h-full bg-opacity-60 bg-black flex flex-col justify-center items-center">
+          <p>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/Barcode_Detection_API"><u>Barcode Detector API</u></a> 
+            is not supported by your <a href="https://caniuse.com/mdn-api_barcodedetector"><u>browsers</u></a>!
+          </p>
+          <p>Please open this page in your mobile browser (Chrome or Opera).</p>
+        </div>
+      }
     </div>
   )
 }
 
-// export function isBarcodeDetectorAvailable(){
-//   return (typeof window !== undefined && "BarcodeDetector" in window);
-// };
+function isBarcodeDetectorAvailable(){
+  return (typeof window !== undefined && "BarcodeDetector" in window);
+};
