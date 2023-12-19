@@ -5,58 +5,44 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClose } from '@fortawesome/free-solid-svg-icons'
 
-export default function Scanner({ handleResult }) {
+export default function Scanner({ handleResult }: { handleResult: (b: string) => void }) {
 
-  const frameRef = useRef(null);
-  const videoRef = useRef(null);
-  const streamRef = useRef(null);
-  const canvasRef = useRef(null);
+  const frameRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [status, setStatus] = useState(true);
-
-  useEffect(() => {
-    return () => {
-      // Cleanup the camera stream when the component is unmounted
-      if ( streamRef.current ) {
-        const tracks = streamRef.current.getTracks();
-        tracks.forEach( track => track.stop() );
-      }
-      streamRef.current = null;
-    };
-  }, []);
 
   useEffect(() => {
     if( videoRef!==null && videoRef.current!==null ){
       if (status) {
         startStream();
-        // videoRef.current.play();
         handleBarcodeDetection();
       } else {
-        // videoRef.current.pause();
         stopStream();
       }
     }
+    return stopStream;
   }, [status]);
 
   const startStream = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia(
+      const stream: MediaStream = await navigator.mediaDevices.getUserMedia(
         {
           audio: false,
           video: {
             facingMode: 'environment',
-            height: frameRef.current.offsetWidth,
-            width: frameRef.current.offsetHeight
+            height: frameRef.current?.offsetWidth || 300,
+            width: frameRef.current?.offsetHeight || 300
           }
         }
       );
-      streamRef.current = stream;
-      videoRef.current.srcObject = stream;
-      videoRef.current.play();
+      if ( videoRef.current ) {
+        streamRef.current = stream;
 
-      // Log the dimensions of the video stream
-      videoRef.current.onloadedmetadata = () => {
-        console.log('Video Dimensions:', videoRef.current.videoWidth, ' x ', videoRef.current.videoHeight);
-    };
+        videoRef.current.srcObject = stream;
+        videoRef.current.play();
+      };
     } catch (error) {
       console.error('Error accessing camera:', error);
     }
@@ -69,19 +55,18 @@ export default function Scanner({ handleResult }) {
     }
   }
 
-  
-  const handleStatusChange = (status: boolean) => {
-    setStatus(status);
-  }
-
   const handleBarcodeDetection = async () => {
   
-    const ctx = canvasRef.current.getContext("2d");
-    // set canvas width and height to match videoRef.current.videoWidth and videoRef.current.videoHeight
-    canvasRef.current.width = videoRef.current.videoWidth;
-    canvasRef.current.height = videoRef.current.videoHeight;
+    if(canvasRef.current===null || videoRef.current===null) return;
 
-  
+    const ctx = canvasRef.current.getContext("2d");
+    if(ctx===null) return;
+    // set canvas width and height to match videoRef.current.videoWidth and videoRef.current.videoHeight
+    const { videoWidth, videoHeight } = videoRef.current;
+    canvasRef.current.width = videoWidth;
+    canvasRef.current.height = videoHeight;
+
+    // if("BarcodeDetector" in window === false) return;
     const barcodeDetector = new BarcodeDetector({
       formats: ['upc_a', 'ean_8', 'ean_13']
     });
@@ -95,13 +80,13 @@ export default function Scanner({ handleResult }) {
       //! I don't know why interval not clearing!
       clearInterval(myInterval);
 
-      let canvas = canvasRef.current;
       // Clear prev drawing and draw new bounding box
-      ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+      ctx.clearRect(0, 0, videoWidth, videoHeight);
       // Add a shot of the video stream to the canvas
-      ctx.drawImage(videoRef.current, 0, 0, canvas.offsetWidth, canvas.offsetHeight);
+      if (videoRef.current)
+        ctx.drawImage(videoRef.current, 0, 0, videoWidth, videoHeight);
       ctx.beginPath()
-      ctx.lineWidth = "3";
+      ctx.lineWidth = 3;
       ctx.strokeStyle = "red";
       ctx.moveTo(barcodes[0].cornerPoints[0].x, barcodes[0].cornerPoints[0].y);
       ctx.lineTo(barcodes[0].cornerPoints[1].x, barcodes[0].cornerPoints[1].y);
@@ -113,7 +98,7 @@ export default function Scanner({ handleResult }) {
       // send result to parent
       handleResult(barcodes[0].rawValue);
       // Pause video and stop barcode detection interval
-      handleStatusChange(false);
+      setStatus(false);
 
     }, 1000);
   };
@@ -134,7 +119,7 @@ export default function Scanner({ handleResult }) {
         Your browser does not support the video tag.
       </video>
       <canvas id="myCanvas" ref={canvasRef} className="absolute top-0 left-0" width={200} height={300}></canvas>
-      {!status && <FontAwesomeIcon icon={faClose} className='absolute top-0 right-0 m-4 text-2xl text-white cursor-pointer' onClick={()=>handleStatusChange(true)} />}
+      {!status && <FontAwesomeIcon icon={faClose} className='absolute top-0 right-0 m-4 text-2xl text-white cursor-pointer' onClick={()=>setStatus(true)} />}
     </div>
   )
 }
