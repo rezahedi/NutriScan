@@ -93,6 +93,10 @@ export async function createNutritionObjectFromOpenFoodFacts(json: any): Promise
 
 export async function fetchFromUSDA(barcode: string): Promise<any> {
   try {
+    if ( !process.env.USDA_API_KEY ) {
+      throw new Error('Missing env var for USDA API key: `USDA_API_KEY`');
+    }
+
     const result = await fetch(
       `https://api.nal.usda.gov/fdc/v1/foods/search?query=${barcode}&pageSize=1&api_key=${process.env.USDA_API_KEY}`
     );
