@@ -35,7 +35,7 @@ export const verifyNutrient = (nutrient: NutrientProps) : MetricProps | null => 
     return null;
 
   // Verify if nutrient is available in nutrientMetrics constant
-  const metric = nutrientMetrics[nutrient.name] || null;
+  const metric = nutrientMetrics[ nutrient.name as keyof typeof nutrientMetrics ] || null;
   if ( metric === null )
     return null;
 

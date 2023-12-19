@@ -111,7 +111,7 @@ export async function fetchFromUSDA(barcode: string): Promise<any> {
 export async function createNutritionObjectFromUSDA(json: any): Promise<NutritionProps | null> {
   const createNutrient = (nutrient: any): NutrientProps => ({
     id: parseInt(nutrient.nutrientId || ""),
-    name: USDAGovCodeToOFFOrgKeyword[ nutrient.nutrientNumber ] || nutrient.nutrientName || "",
+    name: USDAGovCodeToOFFOrgKeyword[ nutrient.nutrientNumber as keyof typeof USDAGovCodeToOFFOrgKeyword ] || nutrient.nutrientName || "",
     code: nutrient.nutrientNumber || "",
     amount: parseFloat(nutrient.value || ""),
     unitName: nutrient.unitName || "",
