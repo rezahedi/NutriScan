@@ -59,6 +59,10 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
   }
 
   const handleBarcodeDetection = () => {
+
+    console.log('handleBarcodeDetection', window)
+    if (typeof window === 'undefined') return;
+    console.log('handleBarcodeDetection', window)
   
     if(canvasRef.current===null || videoRef.current===null) return;
 
