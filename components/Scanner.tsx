@@ -67,7 +67,7 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
     canvasRef.current.height = videoHeight;
 
     // if("BarcodeDetector" in window === false) return;
-    const barcodeDetector = new BarcodeDetector({
+    const barcodeDetector = new (window as any).BarcodeDetector({
       formats: ['upc_a', 'ean_8', 'ean_13']
     });
     
