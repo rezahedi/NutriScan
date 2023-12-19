@@ -15,7 +15,7 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
 
   useEffect(() => {
     if( videoRef!==null && videoRef.current!==null ){
-      if (status) {
+      if ( status && typeof window !== 'undefined' ) {
         startStream();
         handleBarcodeDetection();
       } else {
@@ -67,7 +67,7 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
     canvasRef.current.height = videoHeight;
 
     // if("BarcodeDetector" in window === false) return;
-    const barcodeDetector = new (window as any).BarcodeDetector({
+    const barcodeDetector = new window.BarcodeDetector({
       formats: ['upc_a', 'ean_8', 'ean_13']
     });
     
