@@ -67,7 +67,7 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
     canvasRef.current.height = videoHeight;
 
     // if("BarcodeDetector" in window === false) return;
-    const barcodeDetector = new window.BarcodeDetector({
+    const barcodeDetector = new (window as any).BarcodeDetector({
       formats: ['upc_a', 'ean_8', 'ean_13']
     });
     
@@ -115,7 +115,7 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
 
   return (
     <div ref={frameRef} className="relative w-full h-2/4">
-      <video className="w-full h-full" ref={videoRef} onLoadedMetadata={handleBarcodeDetection}>
+      <video className="w-full h-full" ref={videoRef} onLoadedMetadata={()=>setStatus(true)}>
         Your browser does not support the video tag.
       </video>
       <canvas id="myCanvas" ref={canvasRef} className="absolute top-0 left-0" width={200} height={300}></canvas>
