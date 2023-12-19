@@ -14,14 +14,17 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
   const [status, setStatus] = useState(true);
 
   useEffect(() => {
-    if( videoRef!==null && videoRef.current!==null ){
-      if ( status && typeof window !== 'undefined' ) {
-        startStream();
-        handleBarcodeDetection();
-      } else {
-        stopStream();
+    (async () => {
+      if( videoRef!==null && videoRef.current!==null ){
+        if ( status && typeof window !== 'undefined' ) {
+          console.log('window', window);
+          await startStream();
+          handleBarcodeDetection();
+        } else {
+          stopStream();
+        }
       }
-    }
+    })();
     return stopStream;
   }, [status]);
 
@@ -41,7 +44,7 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
         streamRef.current = stream;
 
         videoRef.current.srcObject = stream;
-        videoRef.current.play();
+        await videoRef.current.play();
       };
     } catch (error) {
       console.error('Error accessing camera:', error);
