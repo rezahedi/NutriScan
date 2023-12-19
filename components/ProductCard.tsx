@@ -36,11 +36,15 @@ export default function ProductCard( {product, showNutrients=false}: {product: N
     });
   
     // 2. Sort nutrients by rate (Negative to Positive)
-    analyzedNutrients.sort((a, b) => b.rate - a.rate );
+    analyzedNutrients.sort((a, b) => {
+      if ( !b.rate || !a.rate )
+        return 0;
+      return b.rate - a.rate
+    });
 
     // 3. Separate negatives and positives (positive to negative => 0, 1, 2, 3)
-    setnegativeNutrients( analyzedNutrients.filter((nutrient) => nutrient.rate >= 2) );
-    setpositiveNutrients( analyzedNutrients.filter((nutrient) => nutrient.rate < 2) );
+    setnegativeNutrients( analyzedNutrients.filter((nutrient) => nutrient.rate && nutrient.rate >= 2) );
+    setpositiveNutrients( analyzedNutrients.filter((nutrient) => nutrient.rate && nutrient.rate < 2) );
     // product.nutrients = analyzedNutrients;
   });
 
