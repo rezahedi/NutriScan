@@ -42,7 +42,7 @@ export default function ProductCard( {product, showNutrients=false}: {product: N
     setnegativeNutrients( analyzedNutrients.filter((nutrient) => nutrient.rate >= 2) );
     setpositiveNutrients( analyzedNutrients.filter((nutrient) => nutrient.rate < 2) );
     // product.nutrients = analyzedNutrients;
-  }, []);  
+  });
 
 
   return (

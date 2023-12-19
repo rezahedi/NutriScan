@@ -8,6 +8,13 @@ import { NutritionProps } from "@/types";
 
 
 export default function Home() {
+  const barcodes = [
+    "0186852001478", // Vanilla Talenti
+    "186852000327", // Coconut Talenti
+    "097923002358", // Date
+    "00221290", // Peanut Chocolate pups
+    "00649094", // Pumpkin seeds
+  ]
   const waitingState = 0,
         loadingState = 1,
         errorState = 2,
