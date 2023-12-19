@@ -60,7 +60,6 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
 
   const handleBarcodeDetection = () => {
 
-    console.log('handleBarcodeDetection', window)
     if (typeof window === 'undefined') return;
     console.log('handleBarcodeDetection', window)
   
@@ -132,5 +131,5 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
 }
 
 export function isBarcodeDetectorAvailable(){
-  return ("BarcodeDetector" in window);
+  return (typeof window !== undefined && "BarcodeDetector" in window);
 };
