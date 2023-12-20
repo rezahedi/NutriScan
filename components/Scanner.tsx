@@ -132,7 +132,7 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
       <canvas id="myCanvas" ref={canvasRef} className="absolute top-0 left-0" width={200} height={300}></canvas>
       {!status && <FontAwesomeIcon icon={faClose} className='absolute top-0 right-0 m-4 text-2xl text-white cursor-pointer' onClick={()=>setStatus(true)} />}
       {!cameraAccess &&
-        <div className="absolute top-0 left-0 w-full h-full bg-opacity-60 bg-black flex flex-col justify-center items-center p-3">
+        <div className="absolute top-0 left-0 w-full h-full bg-opacity-60 bg-black flex flex-col justify-center items-center p-3 text-center">
           <p>Camera access is not granted!</p>
           <p>Please allow camera access to scan barcodes.</p>
         </div>

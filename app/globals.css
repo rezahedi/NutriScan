@@ -5,6 +5,8 @@
 
 :root {
   --text: #1a0309;
+  --text-200: #1a0309cd;
+  --text-800: #1a03094c;
   --background: #fef9fb;
   --primary: #931E1E;
   --secondary: #ed5656;
@@ -14,11 +16,33 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --text: #fce4ea;
+    --text-200: #fce4eac4;
+    --text-800: #fce4ea4d;
     --background: #040102;
     --primary: #e16b6b;
     --secondary: #ab1212;
     --accent: #3dbd57;
   }
+}
+
+/* custom scrollbar */
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--text-800);
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-200);
 }
 
 body {
