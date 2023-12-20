@@ -41,6 +41,7 @@ It's a portfolio project and a ground for me to learn Next.js and TypeScript. I 
 - __User Profiles and Authentication:__ Create user profiles for personalized experiences and implement user authentication.
 - __Product History Display:__ Show a list of scanned products for each user in their profile.
 - __Improved UI/UX:__ Enhance the user interface and experience for a more polished and user-friendly application.
+- __PWA:__ Make the application a Progressive Web App for offline use and native app-like experience.
 
 Contributions to the project are welcome! Feel free to submit issues, feature requests, or pull requests.
 
