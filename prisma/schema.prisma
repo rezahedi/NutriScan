@@ -52,7 +52,7 @@ model ProductNutrients {
 
 model Nutrients {
   nutrientID      Int         @id @default(autoincrement())
-  name            String
+  name            String      @unique
   icon            String
   products        ProductNutrients[]
 }
