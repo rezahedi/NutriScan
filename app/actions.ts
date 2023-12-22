@@ -1,13 +1,13 @@
 "use server";
 import { NutritionProps, NutrientProps } from "@/types";
 import { USDAGovCodeToOFFOrgKeyword } from "@/constants";
-
+import { checkBarcodeFormat } from "@/utils";
 
 export async function getNutrition(barcode: string): Promise<NutritionProps | null>
 {
   try {
     // Check if barcode all digits are numbers with 8 to 13 digits
-    if ( !/^\d{8,13}$/.test(barcode) )
+    if ( !checkBarcodeFormat(barcode) )
       throw new Error("Barcode format error: Please enter a valid barcode.")
 
     let res = await fetchFromOpenFoodFacts(barcode);

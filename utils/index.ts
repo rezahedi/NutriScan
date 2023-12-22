@@ -105,3 +105,7 @@ export const getBarPartsWidth = (metric: MetricProps) : string[] => {
 
   return widthInPercentages;
 };
+
+export const checkBarcodeFormat = (barcode: string) : boolean => {
+  return /^\d{8,13}$/.test(barcode);
+}
