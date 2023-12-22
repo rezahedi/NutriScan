@@ -21,7 +21,7 @@ model Users {
 }
 
 model Products {
-  productID       Int      @id @default(autoincrement())
+  productID       String   @id @unique
   name            String
   image           String
   brandOwner      String
@@ -39,7 +39,7 @@ model Products {
 
 model ProductNutrients {
   id              Int         @id @default(autoincrement())
-  product_ID      Int
+  product_ID      String
   nutrient_ID     Int
   amount          Float
   unitName        String
