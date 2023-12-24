@@ -45,6 +45,4 @@ model ProductNutrients {
   unitName        String
   rated           Int
   product         Products    @relation(fields: [product_ID], references: [productID])
-
-  @@unique([product_ID])
 }
