@@ -40,19 +40,11 @@ model Products {
 model ProductNutrients {
   id              Int         @id @default(autoincrement())
   product_ID      String
-  nutrient_ID     Int
+  nameKey         String
   amount          Float
   unitName        String
   rated           Int
   product         Products    @relation(fields: [product_ID], references: [productID])
-  nutrient        Nutrients   @relation(fields: [nutrient_ID], references: [nutrientID])
 
-  @@unique([product_ID, nutrient_ID])
-}
-
-model Nutrients {
-  nutrientID      Int         @id @default(autoincrement())
-  name            String      @unique
-  icon            String
-  products        ProductNutrients[]
+  @@unique([product_ID])
 }
