@@ -1,7 +1,26 @@
 "use server";
 import { NutritionProps, NutrientProps } from "@/types";
 import { USDAGovCodeToOFFOrgKeyword } from "@/constants";
-import { checkBarcodeFormat } from "@/utils";
+import { checkBarcodeFormat, convertMetric, getRateIndex, verifyNutrient } from "@/utils";
+import { PrismaClient, Products, ProductNutrients } from "@prisma/client";
+
+
+export async function getProductFromDatabase(barcode: string): Promise<Products | null>
+{
+  try {
+    if ( !checkBarcodeFormat(barcode) )
+      throw new Error("Barcode format error: Please enter a valid barcode.")
+
+    const prisma = new PrismaClient();
+    return prisma.products.findUnique({
+      where: { productID: barcode },
+      include: { nutrients: true }
+    });
+
+  } catch (error) {
+    return null;
+  }  
+}
 
 export async function getNutrition(barcode: string): Promise<NutritionProps | null>
 {
@@ -10,15 +29,86 @@ export async function getNutrition(barcode: string): Promise<NutritionProps | nu
     if ( !checkBarcodeFormat(barcode) )
       throw new Error("Barcode format error: Please enter a valid barcode.")
 
-    let res = await fetchFromOpenFoodFacts(barcode);
+    //TODO: check database for barcode first
+    // let product = await getProductFromDatabase(barcode);
+    // if ( product !== null )
+    //   return product;
 
-    if(res === null)
-      res = await fetchFromUSDA(barcode);
+    let product: NutritionProps | null = null;
+    product = await fetchFromOpenFoodFacts(barcode);
 
-    if( res === null )
+    if(product === null)
+      product = await fetchFromUSDA(barcode);
+
+    if( product === null )
       throw new Error("No result from USDA or OpenFoodFacts");
 
-    return res;
+    // TODO: analyze, rate and save to database
+    let { nutrients } = product;
+    
+    if ( nutrients.length === 0 )
+      throw new Error("No nutrients found in the product.");
+    
+    const analyzedNutrients: NutrientProps[] = [];
+    nutrients.forEach((nutrient) => {
+      // Verify and get nutrient metric object
+      let metric = verifyNutrient(nutrient);
+      if ( metric === null ) return;
+  
+      nutrient.metric = metric;
+  
+      // Convert nutrient amount to match the benchmarks' unit
+      nutrient.amount = convertMetric( nutrient.amount, nutrient.unitName, nutrient.metric.benchmarks_unit );
+      nutrient.unitName = nutrient.metric.benchmarks_unit;
+  
+      // Find the rate's index of nutrient amount
+      nutrient.ratedIndex = getRateIndex( nutrient.amount, nutrient.metric );
+      nutrient.rate = nutrient.metric.rates[ nutrient.ratedIndex ];
+
+      analyzedNutrients.push( nutrient );
+    });
+
+    const prisma = new PrismaClient();
+    const { productID } = await prisma.products.create({
+      data: {
+        productID: barcode,
+        name: product.name,
+        image: product.image,
+        brandOwner: product.brandOwner,
+        brandName: product.brandName,
+        ingredients: product.ingredients,
+        servingSize: product.servingSize,
+        servingUnit: product.servingSizeUnit,
+        packageWeight: product.packageWeight,
+        rated: 0,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        nutrients: {
+          create: analyzedNutrients.map((nutrient) => {
+            return {
+              nutrient_ID: nutrient.id,
+              amount: nutrient.amount,
+              unitName: nutrient.unitName,
+              rated: nutrient.rate,
+            }
+          })
+        }
+      }
+    });
+
+    // insert nutrients into Nutrients table if name does not exist
+    // await prisma.$transaction(
+    //   analyzedNutrients.map((nutrient) => {
+    //     return prisma.nutrients.create({
+    //       data: {
+    //         name: nutrient.name,
+    //         icon: nutrient.metric?.img || "",
+    //       }
+    //     });
+    //   })
+    // );
+    
+    return product;
 
   } catch (error) {
     return null;
