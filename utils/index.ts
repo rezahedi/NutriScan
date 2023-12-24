@@ -58,6 +58,14 @@ export const getRateIndex = (amount: number, metric: MetricProps) : number => {
     : benchmarks_100g.length - 1;
 }
 
+export const getRateByIndex = (index: number, { rates }: MetricProps) : number => {
+  return rates[ index ];
+}
+
+export const getIndexOfRate = (rate: number, { rates }: MetricProps) : number => {
+  return rates.indexOf( rate );
+}
+
 /**
  * 3: Get nutrient Bar UI values
  */
