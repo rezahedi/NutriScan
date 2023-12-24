@@ -1,7 +1,8 @@
 "use server";
 import { NutritionProps, NutrientProps } from "@/types";
 import { USDAGovCodeToOFFOrgKeyword } from "@/constants";
-import { checkBarcodeFormat } from "@/utils";
+import { checkBarcodeFormat, convertMetric, getRateIndex, verifyNutrient } from "@/utils";
+import { PrismaClient } from "@prisma/client";
 
 export async function getProduct(barcode: string): Promise<NutritionProps | null>
 {
@@ -10,17 +11,76 @@ export async function getProduct(barcode: string): Promise<NutritionProps | null
     if ( !checkBarcodeFormat(barcode) )
       throw new Error("Barcode format error: Please enter a valid barcode.")
 
-    let res = await fetchFromOpenFoodFacts(barcode);
+    //TODO: check database for barcode first
+    // let product = await getProductFromDatabase(barcode);
+    // if ( product !== null )
+    //   return product;
 
-    if(res === null)
-      res = await fetchFromUSDA(barcode);
+    let product: NutritionProps | null = null;
+    product = await fetchFromOpenFoodFacts(barcode);
 
-    if( res === null )
-      throw new Error("No result from USDA or OpenFoodFacts");
+    if(product === null)
+      product = await fetchFromUSDA(barcode);
 
-    return res;
+    if( product === null )
+      throw new Error("No result from USDA or OpenFoodFacts APIs.");
+
+    // TODO: analyze, rate and insert new product with all related nutrients into database
+    let { nutrients } = product;
+    
+    if ( nutrients.length === 0 )
+      throw new Error("Product doesn't have any nutrients.");
+    
+    const analyzedNutrients: NutrientProps[] = [];
+    nutrients.forEach((nutrient) => {
+      // Verify and get nutrient metric object
+      let metric = verifyNutrient(nutrient);
+      if ( metric === null ) return;
+  
+      nutrient.metric = metric;
+  
+      // Convert nutrient amount to match the benchmarks' unit
+      nutrient.amount = convertMetric( nutrient.amount, nutrient.unitName, nutrient.metric.benchmarks_unit );
+      nutrient.unitName = nutrient.metric.benchmarks_unit;
+  
+      // Find the rate's index of nutrient amount
+      nutrient.ratedIndex = getRateIndex( nutrient.amount, nutrient.metric );
+      nutrient.rate = nutrient.metric.rates[ nutrient.ratedIndex ];
+
+      analyzedNutrients.push( nutrient );
+    });
+    product.nutrients = analyzedNutrients;
+
+    const prisma = new PrismaClient();
+    const { productID } = await prisma.products.create({
+      data: {
+        productID: barcode,
+        name: product.name,
+        image: product.image,
+        brandOwner: product.brandOwner,
+        brandName: product.brandName,
+        ingredients: product.ingredients,
+        servingSize: product.servingSize,
+        servingUnit: product.servingSizeUnit,
+        packageWeight: product.packageWeight,
+        rated: 0,
+        nutrients: {
+          create: product.nutrients.map((nutrient) => {
+            return {
+              nameKey: nutrient.name,
+              amount: nutrient.amount,
+              unitName: nutrient.unitName,
+              rated: nutrient.rate || 0,
+            }
+          })
+        }
+      }
+    });
+    
+    return product;
 
   } catch (error) {
+    console.log(error);
     return null;
   }
 }
