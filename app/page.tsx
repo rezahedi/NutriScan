@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Image from 'next/image';
 import Link from 'next/link';
-import { getNutrition } from '@/app/actions';
+import { getProduct } from '@/app/actions';
 import { DeviceFrame, Scanner, ProductCard } from '@/components';
 import { NutritionProps } from "@/types";
 
@@ -25,7 +25,7 @@ export default function Home() {
   const handleDetectedBarcode = async (barcode: string) =>
   {
     setState(loadingState);
-    let result = await getNutrition(barcode);
+    let result = await getProduct(barcode);
 
     if ( result !== null ) {
       setNutritionFacts( result );
