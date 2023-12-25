@@ -25,10 +25,15 @@ npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-To use USDA API, you need to set environment variables for the API secret. Create a `.env` file in the root directory and add the following variable:
+## Environment Variables
+
+Create a `.env` file in the root directory and add the following variables:
 
 ```bash
+# To use USDA API, you need to set environment variables for the API secret. 
 USDA_API_KEY="Your USDA Secret Key"
+# Prisma uses SQLite, set the database URL to a local file. 
+DATABASE_URL="file:./dev.db"
 ```
 
 Check the live demo at [https://nutrition-facts-scanner.vercel.app](https://nutrition-facts-scanner.vercel.app).
