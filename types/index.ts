@@ -1,3 +1,5 @@
+import { ProductNutrients, Products } from "@prisma/client";
+
 export interface NutritionProps {
   id: string;
   name: string;
@@ -31,3 +33,7 @@ export interface MetricProps {
   benchmarks_ratio?: number[];
   rates: number[],
 }
+
+export type ProductWithNutrients = Products & {
+  nutrients: ProductNutrients[];
+};

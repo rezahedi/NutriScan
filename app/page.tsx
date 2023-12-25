@@ -4,8 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getProduct } from '@/app/actions';
 import { DeviceFrame, Scanner, ProductCard } from '@/components';
-import { NutritionProps } from "@/types";
-
+import { ProductWithNutrients } from "@/types";
+import ProductsList from "@/components/ProductsList";
 
 export default function Home() {
   const barcodes = [
@@ -20,7 +20,7 @@ export default function Home() {
         errorState = 2,
         successState = 3;
   const [state, setState] = useState( waitingState );
-  const [nutritionFacts, setNutritionFacts] = useState<null | NutritionProps>(null);
+  const [product, setProduct] = useState<null | ProductWithNutrients>(null);
 
   const handleDetectedBarcode = async (barcode: string) =>
   {
@@ -28,7 +28,7 @@ export default function Home() {
     let result = await getProduct(barcode);
 
     if ( result !== null ) {
-      setNutritionFacts( result );
+      setProduct( result );
       setState(successState);
     } else {
       setState(errorState);
@@ -36,7 +36,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    handleDetectedBarcode('0186852001478');
+    // handleDetectedBarcode('0186852001478');
   }, []);
 
   return (
@@ -52,8 +52,11 @@ export default function Home() {
         {state === waitingState && <p>Scanning...</p>}
         {state === loadingState && <p>Loading...</p>}
         {state === errorState && <p>Product does not Detected!</p>}
-        {state === successState && nutritionFacts && (
-          <ProductCard product={nutritionFacts} showNutrients={true} />
+        {state === successState && product && (
+          <ProductCard product={product} nutrients={product.nutrients} />
+        )}
+        {!product && (
+          <ProductsList />
         )}
       </div>
     </DeviceFrame>

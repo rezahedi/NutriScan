@@ -1,71 +1,108 @@
 "use server";
-import { NutritionProps, NutrientProps } from "@/types";
+import { NutritionProps, NutrientProps, ProductWithNutrients } from "@/types";
 import { USDAGovCodeToOFFOrgKeyword } from "@/constants";
 import { checkBarcodeFormat, convertMetric, getRateIndex, verifyNutrient } from "@/utils";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Products } from "@prisma/client";
 
-export async function getProduct(barcode: string): Promise<NutritionProps | null>
+
+export async function getProducts(page: number = 1, limit: number = 10): Promise<Products[] | null>
+{
+  try {
+    const prisma = new PrismaClient();
+    return await prisma.products.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+    }).catch((error) => {
+      console.log(error);
+      return null;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+
+  } catch (error) {
+    console.log(error);
+    return null;
+  }  
+}
+
+export async function getProductFromDatabase(barcode: string): Promise<ProductWithNutrients | null>
+{
+  try {
+    const prisma = new PrismaClient();
+    return await prisma.products.findUnique({
+      where: { productID: barcode },
+      include: { nutrients: {
+        orderBy: { rated: "desc" }
+      } }
+    });
+
+  } catch (error) {
+    console.log(error);
+    return null;
+  }  
+}
+
+export async function getProduct(barcode: string): Promise<ProductWithNutrients | null>
 {
   try {
     // Check if barcode all digits are numbers with 8 to 13 digits
     if ( !checkBarcodeFormat(barcode) )
       throw new Error("Barcode format error: Please enter a valid barcode.")
 
-    //TODO: check database for barcode first
-    // let product = await getProductFromDatabase(barcode);
-    // if ( product !== null )
-    //   return product;
+    // Check database for product if exists
+    let product: ProductWithNutrients | null = await getProductFromDatabase(barcode);
+    if ( product !== null )
+      return product;
 
-    let product: NutritionProps | null = null;
-    product = await fetchFromOpenFoodFacts(barcode);
+    // Fetch from Open Food Facts Org. API
+    let newProduct: NutritionProps | null = null;
+    newProduct = await fetchFromOpenFoodFacts(barcode);
 
-    if(product === null)
-      product = await fetchFromUSDA(barcode);
+    // Fetch from USDA Gov. API
+    if(newProduct === null)
+      newProduct = await fetchFromUSDA(barcode);
 
-    if( product === null )
+    if( newProduct === null )
       throw new Error("No result from USDA or OpenFoodFacts APIs.");
 
-    // TODO: analyze, rate and insert new product with all related nutrients into database
-    let { nutrients } = product;
+    // Analyze, rate and insert new product with all related nutrients into database
+    let { nutrients } = newProduct;
     
     if ( nutrients.length === 0 )
       throw new Error("Product doesn't have any nutrients.");
     
-    const analyzedNutrients: NutrientProps[] = [];
+    const ratedNutrients: NutrientProps[] = [];
     nutrients.forEach((nutrient) => {
       // Verify and get nutrient metric object
       let metric = verifyNutrient(nutrient);
       if ( metric === null ) return;
   
-      nutrient.metric = metric;
-  
       // Convert nutrient amount to match the benchmarks' unit
-      nutrient.amount = convertMetric( nutrient.amount, nutrient.unitName, nutrient.metric.benchmarks_unit );
-      nutrient.unitName = nutrient.metric.benchmarks_unit;
+      nutrient.amount = convertMetric( nutrient.amount, nutrient.unitName, metric.benchmarks_unit );
+      nutrient.unitName = metric.benchmarks_unit;
   
-      // Find the rate's index of nutrient amount
-      nutrient.ratedIndex = getRateIndex( nutrient.amount, nutrient.metric );
-      nutrient.rate = nutrient.metric.rates[ nutrient.ratedIndex ];
+      // Find the rate of nutrient amount
+      nutrient.rate = metric.rates[ getRateIndex( nutrient.amount, metric ) ];
 
-      analyzedNutrients.push( nutrient );
+      ratedNutrients.push( nutrient );
     });
-    product.nutrients = analyzedNutrients;
+    newProduct.nutrients = ratedNutrients;
 
     const prisma = new PrismaClient();
-    const { productID } = await prisma.products.create({
+    let res = await prisma.products.create({
       data: {
         productID: barcode,
-        name: product.name,
-        image: product.image,
-        brandOwner: product.brandOwner,
-        brandName: product.brandName,
-        ingredients: product.ingredients,
-        servingSize: product.servingSize,
-        servingUnit: product.servingSizeUnit,
-        packageWeight: product.packageWeight,
+        name: newProduct.name,
+        image: newProduct.image,
+        brandOwner: newProduct.brandOwner,
+        brandName: newProduct.brandName,
+        ingredients: newProduct.ingredients,
+        servingSize: newProduct.servingSize,
+        servingUnit: newProduct.servingSizeUnit,
+        packageWeight: newProduct.packageWeight,
         rated: 0,
         nutrients: {
-          create: product.nutrients.map((nutrient) => {
+          create: newProduct.nutrients.map((nutrient) => {
             return {
               nameKey: nutrient.name,
               amount: nutrient.amount,
@@ -76,8 +113,11 @@ export async function getProduct(barcode: string): Promise<NutritionProps | null
         }
       }
     });
+
+    if ( res === null )
+      throw new Error("Error while inserting product into database.");
     
-    return product;
+    return await getProductFromDatabase(barcode);
 
   } catch (error) {
     console.log(error);

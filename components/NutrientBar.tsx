@@ -1,23 +1,27 @@
 import Image from 'next/image'
 import { NutrientProps } from '@/types'
 import { rateIndexColors } from '@/constants'
-import { limitDecimalPlaces, getBarUIDetails } from '@/utils'
+import { limitDecimalPlaces, getBarUIDetails, getRateByIndex, getMetric } from '@/utils'
+import { ProductNutrients } from '@prisma/client';
 
-export default function NutrientBar({nutrient}: {nutrient: NutrientProps}) {
+export default function NutrientBar({nutrient}: {nutrient: ProductNutrients}) {
 
-  const { metric, amount, ratedIndex } = nutrient;
+  const { amount } = nutrient;
 
-  if( ratedIndex === undefined || metric === undefined ) return;
+  const metric = getMetric( nutrient.nameKey );
+  if ( !metric ) return;
+
+  const ratedIndex = getRateByIndex( nutrient.rated, metric );
 
   // Get UI details
-  const ui = getBarUIDetails( amount, ratedIndex , metric);
+  const ui = getBarUIDetails( amount, ratedIndex, metric);
 
   return (
     <div key={nutrient.id} className="flex flex-row gap-4 border-b border-b-gray-600 last:border-b-0 py-4">
       <div>
       <Image
         src={ metric.img }
-        alt={ nutrient.name }
+        alt={ metric.name }
         className='w-6 pt-2 grayscale'
         width="24" height="24" />
       </div>

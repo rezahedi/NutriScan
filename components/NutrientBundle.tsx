@@ -1,7 +1,7 @@
-import { NutrientProps } from "@/types";
 import { NutrientBar } from "@/components";
+import { ProductNutrients } from "@prisma/client";
 
-export default function NutrientBundle( {title, nutrients}: {title: string, nutrients: NutrientProps[]} ) {
+export default function NutrientBundle( {title, nutrients}: {title: string, nutrients: ProductNutrients[]} ) {
   return (
     <>
       <div className='flex justify-between items-center pt-6 pb-2'>
