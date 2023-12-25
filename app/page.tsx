@@ -2,9 +2,9 @@
 import { useState, useEffect } from "react";
 import Image from 'next/image';
 import Link from 'next/link';
-import { getProduct } from '@/app/actions';
+import { checkProduct } from '@/app/actions';
 import { DeviceFrame, Scanner, ProductCard } from '@/components';
-import { ProductWithNutrients } from "@/types";
+import { Products } from "@prisma/client";
 import ProductsList from "@/components/ProductsList";
 
 export default function Home() {
@@ -20,12 +20,12 @@ export default function Home() {
         errorState = 2,
         successState = 3;
   const [state, setState] = useState( waitingState );
-  const [product, setProduct] = useState<null | ProductWithNutrients>(null);
+  const [product, setProduct] = useState<null | Products>(null);
 
   const handleDetectedBarcode = async (barcode: string) =>
   {
     setState(loadingState);
-    let result = await getProduct(barcode);
+    let result = await checkProduct(barcode);
 
     if ( result !== null ) {
       setProduct( result );
@@ -36,7 +36,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    // handleDetectedBarcode('0186852001478');
+    handleDetectedBarcode("00649094");
   }, []);
 
   return (
@@ -53,7 +53,7 @@ export default function Home() {
         {state === loadingState && <p>Loading...</p>}
         {state === errorState && <p>Product does not Detected!</p>}
         {state === successState && product && (
-          <ProductCard product={product} nutrients={product.nutrients} />
+          <ProductCard product={product} withNutrients />
         )}
         {!product && (
           <ProductsList />

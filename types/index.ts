@@ -33,7 +33,3 @@ export interface MetricProps {
   benchmarks_ratio?: number[];
   rates: number[],
 }
-
-export type ProductWithNutrients = Products & {
-  nutrients: ProductNutrients[];
-};

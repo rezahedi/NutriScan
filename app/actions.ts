@@ -1,8 +1,8 @@
 "use server";
-import { NutritionProps, NutrientProps, ProductWithNutrients } from "@/types";
+import { NutritionProps, NutrientProps } from "@/types";
 import { USDAGovCodeToOFFOrgKeyword } from "@/constants";
 import { checkBarcodeFormat, convertMetric, getRateIndex, verifyNutrient } from "@/utils";
-import { PrismaClient, Products } from "@prisma/client";
+import { PrismaClient, ProductNutrients, Products } from "@prisma/client";
 
 
 export async function getProducts(page: number = 1, limit: number = 10): Promise<Products[] | null>
@@ -22,18 +22,15 @@ export async function getProducts(page: number = 1, limit: number = 10): Promise
   } catch (error) {
     console.log(error);
     return null;
-  }  
+  }
 }
 
-export async function getProductFromDatabase(barcode: string): Promise<ProductWithNutrients | null>
+export async function getProduct(barcode: string): Promise<Products | null>
 {
   try {
     const prisma = new PrismaClient();
     return await prisma.products.findUnique({
-      where: { productID: barcode },
-      include: { nutrients: {
-        orderBy: { rated: "desc" }
-      } }
+      where: { productID: barcode }
     });
 
   } catch (error) {
@@ -42,7 +39,27 @@ export async function getProductFromDatabase(barcode: string): Promise<ProductWi
   }  
 }
 
-export async function getProduct(barcode: string): Promise<ProductWithNutrients | null>
+export async function getProductNutrients(barcode: string): Promise<ProductNutrients[] | null>
+{
+  try {
+    const prisma = new PrismaClient();
+    return await prisma.productNutrients.findMany({
+      where: { product_ID: barcode },
+      orderBy: { rated: "desc" }
+    }).catch((error) => {
+      console.log(error);
+      return null;
+    }).finally(() => {
+      prisma.$disconnect();
+    });
+
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+export async function checkProduct(barcode: string): Promise<Products | null>
 {
   try {
     // Check if barcode all digits are numbers with 8 to 13 digits
@@ -50,7 +67,7 @@ export async function getProduct(barcode: string): Promise<ProductWithNutrients 
       throw new Error("Barcode format error: Please enter a valid barcode.")
 
     // Check database for product if exists
-    let product: ProductWithNutrients | null = await getProductFromDatabase(barcode);
+    let product: Products | null = await getProduct(barcode);
     if ( product !== null )
       return product;
 
@@ -117,7 +134,7 @@ export async function getProduct(barcode: string): Promise<ProductWithNutrients 
     if ( res === null )
       throw new Error("Error while inserting product into database.");
     
-    return await getProductFromDatabase(barcode);
+    return await getProduct(barcode);
 
   } catch (error) {
     console.log(error);

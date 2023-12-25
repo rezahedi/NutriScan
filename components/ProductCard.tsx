@@ -2,11 +2,22 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image'
 import NutrientBundle from './NutrientBundle';
 import { ProductNutrients, Products } from '@prisma/client';
+import { getProductNutrients } from '@/app/actions';
 
-export default function ProductCard( {product, nutrients}: {product: Products, nutrients?: ProductNutrients[]} ) {
+export default function ProductCard( {product, withNutrients = false}: {product: Products, withNutrients?: boolean} ) {
 
   const [negativeNutrients, setnegativeNutrients] = useState<ProductNutrients[] | null>(null);
   const [positiveNutrients, setpositiveNutrients] = useState<ProductNutrients[] | null>(null);
+  const [nutrients, setNutrients] = useState<ProductNutrients[] | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      if ( !product || !withNutrients || nutrients ) return;
+
+      setNutrients( await getProductNutrients( product.productID ) );
+    })();
+  }, []);
+
 
   useEffect(() => {
     if ( !nutrients ) return;
@@ -15,7 +26,7 @@ export default function ProductCard( {product, nutrients}: {product: Products, n
     // 3. Separate negatives and positives (positive to negative => 0, 1, 2, 3)
     setnegativeNutrients( nutrients.filter((nutrient) => nutrient.rated && nutrient.rated >= 2) );
     setpositiveNutrients( nutrients.filter((nutrient) => nutrient.rated && nutrient.rated < 2) );
-  });
+  }, [nutrients]);
 
 
   return (
@@ -30,7 +41,7 @@ export default function ProductCard( {product, nutrients}: {product: Products, n
           <p className='font-light text-sm'><b>Package Weight:</b> {product.packageWeight}</p>
         </div>
       </div>
-      {nutrients && (
+      {withNutrients && nutrients && (
         <>
           {negativeNutrients && <NutrientBundle title='Negatives' nutrients={negativeNutrients} />}
           {positiveNutrients && <NutrientBundle title='Positives' nutrients={positiveNutrients} />}
