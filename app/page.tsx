@@ -50,7 +50,6 @@ export default function Home() {
       </nav>
       <Scanner handleResult={handleDetectedBarcode} />
       <div className="bg-background">
-        {state === waitingState && <p>Scanning...</p>}
         {state === loadingState && <p>Loading...</p>}
         {state === errorState && <p>Product does not Detected!</p>}
         {state === successState && product && (
