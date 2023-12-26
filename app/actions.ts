@@ -30,7 +30,7 @@ export async function getProduct(barcode: string): Promise<Products | null>
   try {
     const prisma = new PrismaClient();
     return await prisma.products.findUnique({
-      where: { productID: barcode }
+      where: { barcode: barcode }
     });
 
   } catch (error) {
@@ -44,7 +44,7 @@ export async function getProductNutrients(barcode: string): Promise<ProductNutri
   try {
     const prisma = new PrismaClient();
     return await prisma.productNutrients.findMany({
-      where: { product_ID: barcode },
+      where: { productID: barcode },
       orderBy: { rated: "desc" }
     }).catch((error) => {
       console.log(error);
@@ -108,7 +108,7 @@ export async function checkProduct(barcode: string): Promise<Products | null>
     const prisma = new PrismaClient();
     let res = await prisma.products.create({
       data: {
-        productID: barcode,
+        barcode: barcode,
         name: newProduct.name,
         image: newProduct.image,
         brandOwner: newProduct.brandOwner,

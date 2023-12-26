@@ -22,7 +22,7 @@ export default function ProductsList() {
       <h3>ProductsList</h3>
       <div className="flex flex-col gap-2">
         {products.map((product) => 
-          <ProductCard key={product.productID} product={product} />
+          <ProductCard key={product.id} product={product} />
         )}
       </div>
     </>

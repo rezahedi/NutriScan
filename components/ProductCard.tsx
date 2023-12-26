@@ -14,7 +14,7 @@ export default function ProductCard( {product, withNutrients = false}: {product:
     (async () => {
       if ( !product || !withNutrients || nutrients ) return;
 
-      setNutrients( await getProductNutrients( product.productID ) );
+      setNutrients( await getProductNutrients( product.id ) );
     })();
   }, []);
 
