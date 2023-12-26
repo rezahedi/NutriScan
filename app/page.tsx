@@ -35,9 +35,10 @@ export default function Home() {
     }
   }
 
-  useEffect(() => {
-    handleDetectedBarcode("00649094");
-  }, []);
+  // For testing scanning without actually scanning!
+  // useEffect(() => {
+  //   handleDetectedBarcode("00649094");
+  // }, []);
 
   return (
     <DeviceFrame>
