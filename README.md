@@ -54,8 +54,6 @@ Check the live demo at [https://nutrition-facts-scanner.vercel.app](https://nutr
 It's a portfolio project and a ground for me to learn Next.js and TypeScript. I have plans to improve the project in the future:
 
 - __Skeleton Placeholder:__ Add skeleton placeholder for better user experience while fetching data from database.
-- __Homepage as App Introductory Page:__ Keep the homepage as an introductory page for the app features and used tech stacks.
-- __/app Page:__ Create a separate page for the app itself, and if opened in desktop, show a QR code so user can scan it with their phone and open the app on their phone.
 - __User Profiles and Authentication:__ Create user profiles for personalized experiences and implement user authentication.
 - __Product History Display:__ Show a list of scanned products for each user in their profile.
 - __Improved UI/UX:__ Enhance the user interface and experience for a more polished and user-friendly application.
