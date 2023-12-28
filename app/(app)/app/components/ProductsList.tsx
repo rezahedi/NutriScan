@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { Products } from "@prisma/client";
-import { ProductCard } from "@/components";
-import { getProducts } from "@/app/actions";
+import { ProductCard } from "@/(app)/components";
+import { getProducts } from "@/(app)/actions";
 import Link from 'next/link';
 
 
@@ -25,7 +25,7 @@ export default function ProductsList() {
       <h3 className="text-xl pb-4">Your Products:</h3>
       <div className="flex flex-col gap-6">
         {products.map((product) =>
-          <Link href={`/product/${product.barcode}`} key={product.id}> 
+          <Link href={`/app/product/${product.barcode}`} key={product.id}> 
             <ProductCard product={product} />
           </Link>
         )}

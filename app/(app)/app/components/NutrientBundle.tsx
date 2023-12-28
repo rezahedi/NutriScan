@@ -1,4 +1,4 @@
-import { NutrientBar } from "@/components";
+import { NutrientBar } from "@/(app)/components";
 import { ProductNutrients } from "@prisma/client";
 
 export default function NutrientBundle( {title, nutrients}: {title: string, nutrients: ProductNutrients[]} ) {

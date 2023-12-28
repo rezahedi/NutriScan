@@ -1,4 +1,4 @@
-import { ProductCard } from "@/components";
+import { ProductCard } from "@/(app)/components";
 import { PrismaClient, Products } from "@prisma/client";
 // import { Metadata } from 'next'
  
