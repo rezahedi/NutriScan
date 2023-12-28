@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-          <nav className="fixed top-0 flex items-center gap-2 w-full bg-background-200 p-2 border-b">
+          <nav className="fixed top-0 flex items-center gap-2 w-full max-w-lg bg-background-200 p-2 border-b">
             <Link href="/app">
               <Image src="/nutrition-facts-scanner-logo.svg" alt="NutriScann Logo" width="32" height="32" className='sm:w-10 sm:h-10 w-9 h-9' />
             </Link>

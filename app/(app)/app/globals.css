@@ -55,3 +55,7 @@ body {
   color: var(--text);
   background: var(--background);
 }
+
+html, body {
+  @apply max-w-lg mx-auto;
+}
