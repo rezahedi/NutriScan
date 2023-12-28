@@ -15,7 +15,11 @@ const config: Config = {
       },
       colors: {
         'text': 'var(--text)',
+        'text-200': 'var(--text-200)',
+        'text-800': 'var(--text-800)',
         'background': 'var(--background)',
+        'background-200': 'var(--background-200)',
+        'background-800': 'var(--background-800)',
         'primary': 'var(--primary)',
         'secondary': 'var(--secondary)',
         'accent': 'var(--accent)',
