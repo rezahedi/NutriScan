@@ -33,7 +33,7 @@ export default function Page() {
   // }, []);
 
   return (
-    <div className="h-full p-4">
+    <div className="p-4">
       <Scanner handleResult={handleDetectedBarcode} />
       <div className="bg-background">
         {state === loadingState && <p>Loading...</p>}
