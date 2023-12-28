@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google'
 import '../globals.css'
 import Link from 'next/link';
 import Image from 'next/image';
-import { DeviceFrame } from '@/components/app'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,7 +19,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <DeviceFrame>
           <nav className="flex items-center gap-2 w-full bg-background-200 p-2">
             <Link href="/app">
               <Image src="/nutrition-facts-scanner-logo.svg" alt="logo" width="50" height="50" />
@@ -28,7 +26,6 @@ export default function RootLayout({
             <h1 className="text-xl font-semibold">Nutrition Facts Scanner</h1>
           </nav>
           {children}
-        </DeviceFrame>
       </body>
     </html>
   )
