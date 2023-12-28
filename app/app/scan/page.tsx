@@ -2,8 +2,8 @@
 import { useState } from "react";
 import Image from 'next/image';
 import Link from 'next/link';
-import { checkProduct } from '@/app/actions';
-import { Scanner, ProductCard } from '@/components';
+import { checkProduct } from '@/app/app/actions';
+import { Scanner, ProductCard } from '@/components/app';
 import { Products } from "@prisma/client";
 
 export default function Page() {
