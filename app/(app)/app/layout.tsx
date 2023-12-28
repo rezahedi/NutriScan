@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const inter = Inter({ subsets: ['latin'] })
+inter.className = `${inter.className} pt-16`
 
 export const metadata: Metadata = {
   title: 'NutriScan: Nutrition Facts Scanner',
@@ -20,11 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-          <nav className="flex items-center gap-2 w-full bg-background-200 p-2">
+          <nav className="fixed top-0 flex items-center gap-2 w-full bg-background-200 p-2 border-b">
             <Link href="/app">
-              <Image src="/nutrition-facts-scanner-logo.svg" alt="logo" width="50" height="50" />
+              <Image src="/nutrition-facts-scanner-logo.svg" alt="NutriScann Logo" width="32" height="32" className='sm:w-10 sm:h-10 w-9 h-9' />
             </Link>
-            <h1 className="text-xl font-semibold">Nutrition Facts Scanner</h1>
+            <h1 className="sm:text-3xl text-2xl ml-2 tracking-tight">NutriScan</h1>
           </nav>
           {children}
       </body>

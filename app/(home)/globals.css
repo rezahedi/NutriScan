@@ -55,3 +55,10 @@ body {
   color: var(--text);
   background: var(--background);
 }
+
+main a{
+  @apply underline
+}
+main a:hover{
+  @apply no-underline
+}
