@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import Link from 'next/link';
+import Image from 'next/image';
+import { DeviceFrame } from '@/components'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,7 +19,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <DeviceFrame>
+          <nav className="flex items-center gap-2 w-full bg-background-200 p-2">
+            <Link href="/">
+              <Image src="/nutrition-facts-scanner-logo.svg" alt="logo" width="50" height="50" />
+            </Link>
+            <h1 className="text-xl font-semibold">Nutrition Facts Scanner</h1>
+          </nav>
+          {children}
+        </DeviceFrame>
+      </body>
     </html>
   )
 }

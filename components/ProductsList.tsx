@@ -1,7 +1,10 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { Products } from "@prisma/client";
 import { ProductCard } from "@/components";
 import { getProducts } from "@/app/actions";
+import Link from 'next/link';
 
 
 export default function ProductsList() {
@@ -19,10 +22,12 @@ export default function ProductsList() {
 
   return (
     <>
-      <h3>ProductsList</h3>
-      <div className="flex flex-col gap-2">
-        {products.map((product) => 
-          <ProductCard key={product.id} product={product} />
+      <h3 className="text-xl pb-4">Your Products:</h3>
+      <div className="flex flex-col gap-6">
+        {products.map((product) =>
+          <Link href={`/product/${product.barcode}`} key={product.id}> 
+            <ProductCard product={product} />
+          </Link>
         )}
       </div>
     </>
