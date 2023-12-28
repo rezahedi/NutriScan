@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Products } from "@prisma/client";
-import { ProductCard } from "@/components/app";
+import { ProductCard } from "@/(app)/components";
 import { getProducts } from "@/(app)/actions";
 import Link from 'next/link';
 

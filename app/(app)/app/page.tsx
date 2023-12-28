@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ProductsList } from "@/components/app";
+import { ProductsList } from "@/(app)/components";
 
 export default function Home() {
 
