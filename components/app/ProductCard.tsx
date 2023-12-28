@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image'
 import NutrientBundle from './NutrientBundle';
 import { ProductNutrients, Products } from '@prisma/client';
-import { getProductNutrients } from '@/app/(app)/app/actions';
+import { getProductNutrients } from '@/(app)/actions';
 
 export default function ProductCard( {product, withNutrients = false}: {product: Products, withNutrients?: boolean} ) {
 
