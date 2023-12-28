@@ -1,16 +1,12 @@
 import Link from 'next/link';
-import { ProductsList } from "@/components";
 
 export default function Home() {
 
   return (
     <>
-      <div className="bg-background p-4">
-        <ProductsList />
-      </div>
-      <Link href="/scan" className="fixed bottom-4 left-1/2 transform -translate-x-1/2 my-4 bg-accent text-background rounded-full p-4 px-8 shadow-xl">
-        Scan Product
-      </Link>
+      <h1>Nutrition Facts Scanner App</h1>
+      <p>This page is for showing off features of the application and tech stacks behind the app, link to github and screenshots.</p>
+      <Link href="/app" className="my-4 bg-accent text-background rounded-full p-4 px-8 shadow-xl">Application</Link>
     </>
   );
 }
