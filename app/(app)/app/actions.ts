@@ -12,6 +12,7 @@ export async function getProducts(page: number = 1, limit: number = 10): Promise
     return await prisma.products.findMany({
       skip: (page - 1) * limit,
       take: limit,
+      orderBy: { updatedAt: "desc" }
     }).catch((error) => {
       console.log(error);
       return null;
