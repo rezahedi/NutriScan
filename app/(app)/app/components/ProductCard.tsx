@@ -37,11 +37,11 @@ export default function ProductCard( {product, withNutrients = false}: {product:
         <Image src={product.image || `/no-image.webp`} alt={product.name} className='w-1/3 object-cover aspect-square rounded-xl' width="100" height="100" />
         <div className='flex-1'>
           <h3 className="text-lg font-semibold">{product.name}</h3>
-          <p className="text-gray-400 font-light text-sm pb-2">{product.brandName ? product.brandName : product.brandOwner}</p>
-          {/* <p className='pt-2 font-light text-sm'><b>Ingredients:</b> {product.ingredients}</p> */}
-          {product.servingSize &&
+          {(product.brandName || product.brandName) &&
+            <p className="text-gray-400 font-light text-sm pb-2">{product.brandName ? product.brandName : product.brandOwner}</p>}
+          {product.servingSize>0 &&
             <p className='pt-1 font-light text-sm'><b>Serving Size:</b> {product.servingSize}{product.servingUnit}</p>}
-          <p className='pt-2 text-xs italic text-text-800 line-clamp-3 lowercase'>{product.ingredients}</p>
+          {product.ingredients && <p className='pt-2 text-xs italic text-text-800 line-clamp-3 lowercase'>{product.ingredients}</p>}
         </div>
       </div>
       {withNutrients && nutrients && (
