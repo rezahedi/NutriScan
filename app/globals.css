@@ -6,7 +6,7 @@
  * Color variants made using Realtime Colors:
  * https://www.realtimecolors.com/?colors=090a06-eef6f4-996024-b79f1a-134932&fonts=Poppins-Poppins
  */
-:root {
+ :root {
   --text: #090a06;
   --text-1: #1d2013;
   --text-2: #394026;
@@ -84,10 +84,5 @@
 }
 
 body {
-  color: var(--text);
-  background: var(--background);
-}
-
-html, body {
-  @apply max-w-lg mx-auto;
+  @apply text-text bg-background;
 }

@@ -1,0 +1,5 @@
+@import url('@/app/globals.css');
+
+html, body {
+  @apply max-w-lg mx-auto
+}
