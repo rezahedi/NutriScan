@@ -8,22 +8,38 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-      },
       colors: {
-        'text': 'var(--text)',
-        'text-200': 'var(--text-200)',
-        'text-800': 'var(--text-800)',
-        'background': 'var(--background)',
-        'background-200': 'var(--background-200)',
-        'background-800': 'var(--background-800)',
-        'primary': 'var(--primary)',
-        'secondary': 'var(--secondary)',
-        'accent': 'var(--accent)',
-      },   
+        'text': {
+          DEFAULT: 'var(--text)',
+          1: 'var(--text-1)',
+          2: 'var(--text-2)',
+          3: 'var(--text-3)',
+        },
+        'background': {
+          DEFAULT: 'var(--background)',
+          1: 'var(--background-1)',
+          2: 'var(--background-2)',
+          3: 'var(--background-3)',
+        },
+        'primary': {
+          DEFAULT: 'var(--primary)',
+          1: 'var(--primary-1)',
+          2: 'var(--primary-2)',
+          3: 'var(--primary-3)',
+        },
+        'secondary': {
+          DEFAULT: 'var(--secondary)',
+          1: 'var(--secondary-1)',
+          2: 'var(--secondary-2)',
+          3: 'var(--secondary-3)',
+        },
+        'accent': {
+          DEFAULT: 'var(--accent)',
+          1: 'var(--accent-1)',
+          2: 'var(--accent-2)',
+          3: 'var(--accent-3)',
+        },
+      },
     },
   },
   plugins: [],
