@@ -21,15 +21,12 @@ export default function ProductsList() {
   }, []);
 
   return (
-    <>
-      <h3 className="text-xl pb-4">Your Products:</h3>
-      <div className="flex flex-col gap-6">
-        {products.map((product) =>
-          <Link href={`/app/product/${product.barcode}`} key={product.id}> 
-            <ProductCard product={product} />
-          </Link>
-        )}
-      </div>
-    </>
+    <div className="flex flex-col gap-4">
+      {products.map((product) =>
+        <Link href={`/app/product/${product.barcode}`} key={product.id} className="border-b pb-4 last:border-0 last:pb-0 border-background-1"> 
+          <ProductCard product={product} />
+        </Link>
+      )}
+    </div>
   )
 }

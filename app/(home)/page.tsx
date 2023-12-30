@@ -13,10 +13,10 @@ export default function Home() {
       </Head>
       <Header />
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 my-12 sm:mt-20">
-        <p className="border rounded-2xl py-1 px-4 border-text-800 text-text-200 text-sm mb-5 hover:bg-background-800 hover:text-text transition duration-300 ease-in-out">
+        <p className="border rounded-2xl py-1 px-4 border-background-2 text-text-200 text-sm mb-5 hover:bg-background-1 hover:border-background-3 transition duration-300 ease-in-out">
           <b>321</b> barcodes scanned so far
         </p>
-        <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-text">Nutrition Facts Scanner</h1>
+        <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-primary">Nutrition Facts Scanner</h1>
         <div className="max-w-2xl w-full">
           <div className="flex flex-col gap-4 mt-10 items-center text-left">
             <Image src="/Screenshots_20231219-120947-portrait.png" alt="App screenshots" width="600" height="300" />
@@ -24,7 +24,7 @@ export default function Home() {
             <p>This application works only on mobile devices, because it uses the <a target='_blank' href="https://developer.mozilla.org/en-US/docs/Web/API/Barcode_Detection_API">Barcode Detection API</a> which is only available on mobile devices, and not on desktop browsers.</p>
             <p>To use the application, you can either scan the QR code below, or click the link below it to open the application in your mobile browser.</p>
             <Image src="/app-url-qr-code-dark.png" alt="App link QR code" width="300" height="300" className='mix-blend-difference' />
-            <Link href="/app" className="rounded-full no-underline font-medium py-4 px-10 sm:mt-10 mt-8 bg-accent text-background hover:text-text transition duration-300 ease-in-out">Open Application</Link>
+            <Link href="/app" className="rounded-full no-underline font-medium py-4 px-10 sm:mt-10 mt-8 bg-primary text-background hover:scale-105 transition duration-300 ease-in-out">Open Application</Link>
             <p className='text-sm font-light'><i>This project inspired by the <a target='_blank' href='https://yuka.io'>Yuka App</a> which is my favorite app for grocery shopping.</i></p>
           </div>
         </div>

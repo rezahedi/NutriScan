@@ -48,14 +48,14 @@ export default function Footer() {
           className="group"
           aria-label="Reza on Twitter"
         >
-          <Twitter className="h-6 w-6 fill-slate-500 group-hover:fill-slate-700" />
+          <Twitter className="h-6 w-6 fill-text-3 group-hover:fill-text" />
         </Link>
         <Link
           href="https://github.com/rezahedi/nutriscan"
           className="group"
           aria-label="NutriScan on GitHub"
         >
-          <Github className='h-6 w-6 fill-slate-500 group-hover:fill-slate-700' />
+          <Github className='h-6 w-6 fill-text-3 group-hover:fill-text' />
         </Link>
       </div>
     </footer>

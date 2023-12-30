@@ -17,19 +17,19 @@ export default function NutrientBar({nutrient}: {nutrient: ProductNutrients}) {
   const ui = getBarUIDetails( amount, ratedIndex, metric);
 
   return (
-    <div key={nutrient.id} className="flex flex-row gap-4 border-b border-b-gray-600 last:border-b-0 py-4">
+    <div key={nutrient.id} className="flex flex-row gap-4 border-b border-background-3 last:border-b-0 py-4">
       <div>
       <Image
         src={ metric.img }
         alt={ metric.name }
-        className='w-6 pt-2 grayscale'
+        className='w-6 pt-2'
         width="24" height="24" />
       </div>
       <div className="group/item flex flex-col gap-2 grow">
         <div className="flex flex-row justify-between">
           <div className='flex flex-col'>
             <p className="text-sm">{metric.name}</p>
-            <p className="text-xs font-light">{ui.message}</p>
+            <p className="text-xs font-light text-text-2">{ui.message}</p>
           </div>
           <div className='flex items-center gap-2 text-xs'>
             <p>{limitDecimalPlaces(amount, 1)} {metric.benchmarks_unit}</p>

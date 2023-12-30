@@ -33,15 +33,17 @@ export default function ProductCard( {product, withNutrients = false}: {product:
 
   return (
     <>
-      <div className="flex gap-4">
-        <Image src={product.image || `/no-image.webp`} alt={product.name} className='w-1/3 object-cover aspect-square rounded-xl' width="100" height="100" />
+      <div className="flex gap-4 group">
+        <div className='w-1/3 overflow-hidden rounded-xl'>
+          <Image src={product.image || `/no-image.webp`} alt={product.name} className='w-full h-full object-cover aspect-square group-hover:scale-105 transition-transform duration-300 transform' width="100" height="100" />
+        </div>
         <div className='flex-1'>
-          <h3 className="text-lg font-semibold">{product.name}</h3>
+          <h3 className="font-normal group-hover:underline">{product.name}</h3>
           {(product.brandName || product.brandName) &&
-            <p className="text-gray-400 font-light text-sm pb-2">{product.brandName ? product.brandName : product.brandOwner}</p>}
+            <p className="text-text-2 font-light text-sm pb-2">{product.brandName ? product.brandName : product.brandOwner}</p>}
           {product.servingSize>0 &&
-            <p className='pt-1 font-light text-sm'><b>Serving Size:</b> {product.servingSize}{product.servingUnit}</p>}
-          {product.ingredients && <p className='pt-2 text-xs italic text-text-800 line-clamp-3 lowercase'>{product.ingredients}</p>}
+            <p className='pt-1 font-light text-xs'><b>Serving Size:</b> {product.servingSize}{product.servingUnit}</p>}
+          {product.ingredients && <p className='pt-2 text-xs text-text-2 line-clamp-2 lowercase'>{product.ingredients}</p>}
         </div>
       </div>
       {withNutrients && nutrients && (

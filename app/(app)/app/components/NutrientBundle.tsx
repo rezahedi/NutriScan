@@ -9,8 +9,8 @@ export default function NutrientBundle( {title, nutrients}: {title: string, nutr
   return (
     <>
       <div className='flex justify-between items-center pt-6 pb-2'>
-        <h3 className='font-bold text-lg'>{title}</h3>
-        <div className='text-neutral-400'>Per 100g</div>
+        <h3 className='font-semibold text-lg text-primary'>{title}</h3>
+        <div className='font-light text-sm text-primary-3'>Per 100g</div>
       </div>
       <div>
         {nutrients.map((nutrient) => {

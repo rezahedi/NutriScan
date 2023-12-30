@@ -1,0 +1,8 @@
+@import url('@/app/globals.css');
+
+main a{
+  @apply underline
+}
+main a:hover{
+  @apply no-underline
+}
