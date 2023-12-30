@@ -4,7 +4,10 @@ const nextConfig = {
     serverActions: true,
   },
   images: {
-    remotePatterns: [{hostname: 'images.openfoodfacts.org'}],
+    remotePatterns: [
+      {hostname: 'images.openfoodfacts.org'},
+      {hostname: 'api.dicebear.com'}
+    ],
   },
 }
 
