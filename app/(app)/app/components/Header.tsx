@@ -15,7 +15,7 @@ function Header() {
 
 
   return (
-    <nav className="fixed top-0 flex items-center gap-2 w-full max-w-lg bg-background-1 p-2 shadow-md shadow-background">
+    <nav className="fixed z-10 top-0 flex items-center gap-2 w-full max-w-lg bg-background-1 p-2 shadow-md shadow-background">
       <div className="w-9">
         {!isHome &&
           <button onClick={handleGoBack} className="p-2 focus:outline-none">
