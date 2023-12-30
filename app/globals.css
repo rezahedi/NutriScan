@@ -7,10 +7,10 @@
  * https://www.realtimecolors.com/?colors=090a06-eef6f4-996024-b79f1a-134932&fonts=Poppins-Poppins
  */
  :root {
-  --text: #090a06;
-  --text-1: #1d2013;
-  --text-2: #394026;
-  --text-3: #566039;
+  --text: #000000;
+  --text-1: #111111;
+  --text-2: #272727;
+  --text-3: #3f3f3f;
   
   --background: #eef6f4;
   --background-1: #deede9;
@@ -34,15 +34,15 @@
 }
 @media (prefers-color-scheme: dark) {
 :root {
-  --text: #f8f9f5;
-  --text-800: #d2d9bf;
-  --text-700: #bcc69f;
-  --text-600: #a6b380;
+  --text: #ffffff;
+  --text-1: #cecece;
+  --text-2: #a0a0a0;
+  --text-3: #888888;
   
-  --background: #09110f;
-  --background-1: #12211d;
-  --background-2: #23433b;
-  --background-3: #356458;
+  --background: #080a0a;
+  --background-1: #0f1413;
+  --background-2: #141d1b;
+  --background-3: #22312d;
   
   --primary: #dba366;
   --primary-1: #d89b5a;
