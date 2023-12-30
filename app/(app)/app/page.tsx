@@ -9,9 +9,11 @@ export default function Home() {
       <Search />
       <Stats />
       <ProductsList />
-      <Link href="/app/scan" className="fixed bottom-4 left-1/2 transform -translate-x-1/2 my-4 rounded-full no-underline font-medium py-4 px-10 sm:mt-10 mt-8 bg-primary text-background">
-        Scan Product
-      </Link>
+      <div className='h-16'>
+        <Link href="/app/scan" className="fixed bottom-4 left-1/2 transform -translate-x-1/2 rounded-full no-underline font-medium py-4 px-10 bg-primary text-background">
+          Scan Product
+        </Link>
+      </div>
     </div>
   );
 }
