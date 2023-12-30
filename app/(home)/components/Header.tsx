@@ -4,10 +4,10 @@ import { Github } from './'
 
 function Header() {
   return (
-    <header className="flex justify-between items-center w-full mt-5 border-b-2 pb-7 sm:px-4 px-2">
+    <header className="flex justify-between items-center w-full mt-5 border-b-2 border-background-2 pb-7 sm:px-4 px-4 py-2">
       <Link href="/" className="flex items-center space-x-3">
         <Image
-          alt="NutriScann Logo" width={32} height={32}
+          alt="NutriScann Logo" width={36} height={36}
           src="/nutrition-facts-scanner-logo.svg"
           className="sm:w-10 sm:h-10 w-9 h-9"
         />
@@ -16,7 +16,7 @@ function Header() {
         </h1>
       </Link>
       <a
-        className="flex max-w-fit items-center justify-center space-x-2 rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-600 shadow-md transition-colors hover:bg-gray-100"
+        className="flex max-w-fit items-center justify-center space-x-2 rounded-full p-2 sm:px-4 text-sm bg-text-3 text-background shadow-md transition-colors hover:bg-text"
         href="https://github.com/rezahedi/nutriscan"
         target="_blank"
         rel="noopener noreferrer"
