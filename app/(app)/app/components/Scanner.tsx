@@ -125,7 +125,7 @@ export default function Scanner({ handleResult }: { handleResult: (b: string) =>
 
 
   return (
-    <div ref={frameRef} className="relative w-full aspect-square border rounded-2xl my-4 overflow-hidden">
+    <div ref={frameRef} className="relative -z-10 w-full aspect-square border rounded-2xl my-4 overflow-hidden">
       <video className="w-full h-full" ref={videoRef} onLoadedMetadata={()=>setStatus(true)}>
         Your browser does not support the video tag.
       </video>
