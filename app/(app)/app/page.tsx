@@ -9,7 +9,7 @@ export default function Home() {
       <Search />
       <Stats />
       <ProductsList />
-      <div className='h-16'>
+      <div className='h-16 z-10'>
         <Link href="/app/scan" className="fixed bottom-4 left-1/2 transform -translate-x-1/2 rounded-full no-underline font-medium py-4 px-10 bg-primary text-background">
           Scan Product
         </Link>
