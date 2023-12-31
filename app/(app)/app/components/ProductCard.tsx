@@ -5,6 +5,7 @@ import Image from 'next/image'
 import NutrientBundle from './NutrientBundle';
 import { ProductNutrients, Products } from '@prisma/client';
 import { getProductNutrients } from '@/(app)/actions';
+import { NutrientSkeleton } from '@/(app)/components/skeleton';
 
 export default function ProductCard( {product, withNutrients = false}: {product: Products, withNutrients?: boolean} ) {
 
@@ -52,6 +53,11 @@ export default function ProductCard( {product, withNutrients = false}: {product:
           {positiveNutrients && <NutrientBundle title='Positives' nutrients={positiveNutrients} />}
         </>
       )}
+      {withNutrients && !nutrients && 
+        Array.from({length: 4}, (_, index) =>
+          <NutrientSkeleton key={index} />
+        )
+      }
     </>
   )
 }
