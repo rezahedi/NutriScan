@@ -2,9 +2,9 @@
 import { useState } from "react";
 import Image from 'next/image';
 import Link from 'next/link';
-import { checkProduct } from '@/(app)/actions';
+import { checkProduct, getProductNutrients } from '@/(app)/actions';
 import { Scanner, ProductCard } from '@/(app)/components';
-import { Products } from "@prisma/client";
+import { ProductNutrients, Products } from "@prisma/client";
 
 export default function Page() {
   const waitingState = 0,
@@ -13,18 +13,27 @@ export default function Page() {
         successState = 3;
   const [state, setState] = useState( waitingState );
   const [product, setProduct] = useState<null | Products>(null);
+  const [nutrients, setNutrients] = useState<null | ProductNutrients[]>(null);
 
   const handleDetectedBarcode = async (barcode: string) =>
   {
     setState(loadingState);
     let result = await checkProduct(barcode);
 
-    if ( result !== null ) {
-      setProduct( result );
-      setState(successState);
-    } else {
+    if ( result === null ) {
       setState(errorState);
+      return;
     }
+
+    let nutrients = await getProductNutrients( result.id );
+
+    if ( nutrients === null || nutrients.length === 0 ) {
+      setState(errorState);
+      return;
+    }
+    setProduct( result );
+    setNutrients( nutrients );
+    setState(successState);
   }
 
   // For testing scanning without actually scanning!
@@ -38,8 +47,8 @@ export default function Page() {
       <div className="bg-background">
         {state === loadingState && <p>Loading...</p>}
         {state === errorState && <p>Product does not Detected!</p>}
-        {state === successState && product && (
-          <ProductCard product={product} withNutrients />
+        {state === successState && product && nutrients && (
+          <ProductCard product={product} nutrients={nutrients} />
         )}
       </div>
     </div>
