@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { Products } from "@prisma/client";
 import { ProductCard } from "@/(app)/components";
-import { getProducts } from "@/(app)/actions";
 import Link from 'next/link';
 import { ProductSkeleton } from "@/(app)/components/skeleton";
 
@@ -13,9 +12,9 @@ export default function ProductsList() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await getProducts();
-      if ( result !== null )
-        setProducts( result );
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/`);
+      const result = await response.json();
+      setProducts( result );
     };
     fetchData();
   }, []);

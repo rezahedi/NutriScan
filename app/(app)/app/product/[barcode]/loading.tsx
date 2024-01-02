@@ -1,8 +1,14 @@
-import React from 'react'
-import { ProductSkeleton } from "@/(app)/components/skeleton";
+import { NutrientSkeleton, ProductSkeleton } from "@/(app)/components/skeleton";
 
 function Loading() {
-  return <ProductSkeleton />
+  return (
+    <>
+      <ProductSkeleton />
+      {Array.from({length: 4}, (_, index) =>
+        <NutrientSkeleton key={index} />
+      )}
+    </>
+  )
 }
 
 export default Loading
