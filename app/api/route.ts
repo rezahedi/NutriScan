@@ -4,7 +4,8 @@ export async function GET(
   request: Request
 ) {
   try {
-    const searchParams = request.nextUrl.searchParams
+    const { searchParams } = new URL( request.url );
+    // const searchParams = request.nextUrl.searchParams
     const page = searchParams.get('page') || 1;
     const limit = searchParams.get('limit') || 10;
 
