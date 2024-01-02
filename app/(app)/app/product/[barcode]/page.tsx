@@ -1,20 +1,14 @@
 import { ProductCard } from "@/(app)/components";
-import { PrismaClient, Products } from "@prisma/client";
+import { ProductNutrients, Products } from "@prisma/client";
 // import { Metadata } from 'next'
  
 // export const metadata: Metadata = {
 //   title: 'Next.js',
 // }
 
-async function fetchData(barcode: string): Promise<Products | null> {
-  const prisma = new PrismaClient();
-  const data = await prisma.products.findUnique({
-    where: {
-      barcode: barcode
-    }
-  });
-  
-  return data;
+async function fetchData(barcode: string): Promise<{product: Products, nutrients: ProductNutrients[]}> {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${barcode}`);
+  return await response.json();
 }; 
 
 export default async function page(
@@ -22,11 +16,11 @@ export default async function page(
   { params: { barcode: string } }
  ) {
 
-  const product = await fetchData( params.barcode );
+  const { product, nutrients } = await fetchData( params.barcode );
 
   return (
     <div className="p-4">
-      {product && <ProductCard product={product} withNutrients />}
+      {product && <ProductCard product={product} nutrients={nutrients} />}
     </div>
   )
 }
