@@ -6,8 +6,8 @@ export async function GET(
   try {
     const { searchParams } = new URL( request.url );
     // const searchParams = request.nextUrl.searchParams
-    const page = searchParams.get('page') || 1;
-    const limit = searchParams.get('limit') || 10;
+    const page = searchParams.get('page') || '1';
+    const limit = searchParams.get('limit') || '10';
 
     const result = await getProducts( parseInt( page ), parseInt( limit ) );
 
