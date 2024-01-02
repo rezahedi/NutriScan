@@ -40,12 +40,12 @@ export async function getProduct(barcode: string): Promise<Products | null>
   }  
 }
 
-export async function getProductNutrients(barcode: string): Promise<ProductNutrients[] | null>
+export async function getProductNutrients(productID: string): Promise<ProductNutrients[] | null>
 {
   try {
     const prisma = new PrismaClient();
     return await prisma.productNutrients.findMany({
-      where: { productID: barcode },
+      where: { productID },
       orderBy: { rated: "desc" }
     }).catch((error) => {
       console.log(error);
