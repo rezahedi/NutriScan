@@ -1,8 +1,8 @@
 import Image from 'next/image'
-import { NutrientProps } from '@/types'
 import { rateIndexColors } from '@/constants'
 import { limitDecimalPlaces, getBarUIDetails, getRateByIndex, getMetric } from '@/utils'
 import { ProductNutrients } from '@prisma/client';
+import { Back } from '@/(app)/components';
 
 export default function NutrientBar({nutrient}: {nutrient: ProductNutrients}) {
 
@@ -16,8 +16,20 @@ export default function NutrientBar({nutrient}: {nutrient: ProductNutrients}) {
   // Get UI details
   const ui = getBarUIDetails( amount, ratedIndex, metric);
 
+  // handle nutrient bar expand/collapse
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>
+    ) => {
+    let bar = e.currentTarget;
+    let barIcon = bar.querySelectorAll('.barIcon')[0];
+    let barChart = bar.querySelectorAll('.barChart')[0];
+    barIcon.classList.toggle('-rotate-90');
+    barIcon.classList.toggle('rotate-90');
+    barChart.classList.toggle('h-0');
+    barChart.classList.toggle('h-9');
+  }
+
   return (
-    <div key={nutrient.id} className="flex flex-row gap-4 border-b border-background-3 last:border-b-0 py-4">
+    <div onClick={handleClick} className="flex flex-row gap-4 border-b border-background-3 last:border-b-0 py-4 cursor-pointer">
       <div>
       <Image
         src={ metric.img }
@@ -25,7 +37,7 @@ export default function NutrientBar({nutrient}: {nutrient: ProductNutrients}) {
         className='w-6 pt-2'
         width="24" height="24" />
       </div>
-      <div className="group/item flex flex-col gap-2 grow">
+      <div className="flex flex-col gap-2 grow">
         <div className="flex flex-row justify-between">
           <div className='flex flex-col'>
             <p className="text-sm">{metric.name}</p>
@@ -36,9 +48,10 @@ export default function NutrientBar({nutrient}: {nutrient: ProductNutrients}) {
             <div style={{
                 backgroundColor: `${ui.color}`
               }} className='rounded-2xl w-4 h-4'></div>
+            <Back className='barIcon -rotate-90 text-text-3' />
           </div>
         </div>
-        <div className='group/detail -mx-2 px-2 h-0 overflow-hidden group-hover/item:h-9 transition-[height] ease-in-out delay-50'>
+        <div className='barChart h-0 -mx-2 px-2 overflow-hidden transition-[height] ease-in-out delay-50'>
           <div className='relative h-4'>
             <div style={{
                 left: ui.arrowLeft,
