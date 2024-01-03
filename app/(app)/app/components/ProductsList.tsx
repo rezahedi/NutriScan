@@ -1,24 +1,17 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import { Products } from "@prisma/client";
 import { ProductCard } from "@/(app)/components";
 import Link from 'next/link';
 import { ProductSkeleton } from "@/(app)/components/skeleton";
 
-export default function ProductsList() {
+const fetchData = async (): Promise<Products[]> => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/`);
+  return await response.json();
+};
 
-  const [products, setProducts] = useState<Products[] | null>(null);
+export default async function ProductsList() {
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/`);
-      const result = await response.json();
-      setProducts( result );
-    };
-    fetchData();
-  }, []);
-
+  const products = await fetchData();
+  
   return (
     <div className="flex flex-col gap-4">
       {products && products.map((product) =>
