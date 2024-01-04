@@ -19,7 +19,7 @@ export default function Home() {
         <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-primary">Nutrition Facts Scanner</h1>
         <div className="max-w-2xl w-full">
           <div className="flex flex-col gap-4 mt-10 items-center text-left">
-            <Image src="/Screenshots_20231219-120947-portrait.png" alt="App screenshots" width="670" height="300" />
+            <Image src="/Screenshots_20231219-120947-portrait.png" alt="App screenshots" width="670" height="495" />
             <p>This project is an <a target='_blank' href='https://nextjs.org'>Next.js</a> and <a target='_blank' href='https://mongodb.com'>MongoDB</a> project designed to make informed nutrition decisions by scanning UAN or UPC barcode formats on food products. Leveraging the <a target='_blank' href='https://developer.mozilla.org/en-US/docs/Web/API/Barcode_Detection_API'>Browser Barcode Detection API</a>, NutriScan retrieves barcode numbers, calls <a target='_blank' href='https://world.openfoodfacts.org/data'>Open Food Facts</a> or <a target='_blank' href='https://fdc.nal.usda.gov/api-guide.html'>USDA</a> APIs to fetch nutrition facts, analyzes and rates each nutrients. The information is then presented graphically for users to easily understand and make informed decisions about the healthiness of a product.</p>
             <p>This application works only on mobile devices, because it uses the <a target='_blank' href="https://developer.mozilla.org/en-US/docs/Web/API/Barcode_Detection_API">Barcode Detection API</a> which is only available on mobile devices, and not on desktop browsers.</p>
             <p>To use the application, you can either scan the QR code below, or click the link below it to open the application in your mobile browser.</p>
