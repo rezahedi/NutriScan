@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { ProductSkeleton } from "@/(app)/components/skeleton";
 
 const fetchData = async (): Promise<Products[]> => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/`, { next: { revalidate: 3600 } });
   return await response.json();
 };
 
