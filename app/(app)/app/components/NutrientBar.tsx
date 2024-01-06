@@ -28,6 +28,12 @@ export default function NutrientBar({nutrient}: {nutrient: ProductNutrients}) {
     barChart.classList.toggle('h-9');
   }
 
+  // Format amount more readable (0.432 => 0.43, 543.2 => 543, 1.324 => 1.3)
+  // Amounts under 1 limited to 2 decimals, amounts bigger than 10 with no decimals, other than these just 1 decimal
+  let amountFormatted = limitDecimalPlaces(amount, 1);
+  if ( amount < 1 ) amountFormatted = limitDecimalPlaces(amount, 2);
+  if ( amount >= 10 ) amountFormatted = limitDecimalPlaces(amount, 0);
+
   return (
     <div onClick={handleClick} className="flex flex-row gap-4 border-b border-background-3 last:border-b-0 py-4 cursor-pointer">
       <div>
@@ -44,7 +50,7 @@ export default function NutrientBar({nutrient}: {nutrient: ProductNutrients}) {
             <p className="text-xs font-light text-text-2">{ui.message}</p>
           </div>
           <div className='flex items-center gap-2 text-xs'>
-            <p>{limitDecimalPlaces(amount, 1)} {metric.benchmarks_unit}</p>
+            <p>{amountFormatted} {metric.benchmarks_unit}</p>
             <div style={{
                 backgroundColor: `${ui.color}`
               }} className='rounded-2xl w-4 h-4'></div>
