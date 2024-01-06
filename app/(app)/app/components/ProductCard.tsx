@@ -15,8 +15,8 @@ export default function ProductCard( {product, nutrients = []}: {product: Produc
     if ( negativeNutrients !== null || positiveNutrients !== null ) return;
 
     // 3. Separate negatives and positives (positive to negative => 0, 1, 2, 3)
-    setnegativeNutrients( nutrients.filter((nutrient) => nutrient.rated && nutrient.rated >= 2) );
-    setpositiveNutrients( nutrients.filter((nutrient) => nutrient.rated && nutrient.rated < 2) );
+    setnegativeNutrients( nutrients.filter((nutrient) => nutrient.rated >= 2) );
+    setpositiveNutrients( nutrients.filter((nutrient) => nutrient.rated < 2) );
   }, []);
 
 
