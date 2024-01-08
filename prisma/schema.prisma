@@ -31,6 +31,7 @@ model Products {
   servingSize     Float
   servingUnit     String
   packageWeight   String
+  additives       String[]
   rated           Int
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt

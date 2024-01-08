@@ -180,6 +180,7 @@ export async function createNutritionObjectFromOpenFoodFacts(json: any): Promise
       servingSize: parseServingSize(json.serving_size || "")[0],
       servingSizeUnit: parseServingSize(json.serving_size || "")[1],
       packageWeight: "",
+      additives: getAdditives( json.additives_tags ),
       nutrients: [],
     };
 
@@ -202,4 +203,15 @@ export async function createNutritionObjectFromOpenFoodFacts(json: any): Promise
     console.error(error);
     return null;
   }
+}
+
+function getAdditives(additives: string[]): string[] {
+  const additivesList: string[] = [];
+  additives.forEach((a) => {
+    if (a.startsWith('en:')) {
+      a = a.replace('en:', '');
+      additivesList.push(a);
+    }
+  });
+  return additivesList;
 }

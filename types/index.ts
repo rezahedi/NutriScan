@@ -10,6 +10,7 @@ export interface NutritionProps {
   servingSize: number;
   servingSizeUnit: string;
   packageWeight: string;
+  additives: string[];
   nutrients: NutrientProps[];
 }
 
