@@ -10,7 +10,8 @@ export default function NutrientBar({nutrient}: {nutrient: ProductNutrients}) {
 
   const metric = getMetric( nutrient.nameKey );
   if ( !metric ) return;
-
+  
+  //! TODO: This may be wrong, check it
   const ratedIndex = getRateByIndex( nutrient.rated, metric );
 
   // Get UI details
