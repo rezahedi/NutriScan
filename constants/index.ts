@@ -97,6 +97,22 @@ export const nutrientMetrics = {
     benchmarks_unit: 'Cal',
     rates: [0, 1, 2, 3],
   },
+  'additives':
+  {
+    name: "Additives",
+    img: '/additives.png',
+    messages: [
+      "No hazardous substances",     // without any additives
+      "No risky additives",          // with additives
+      "An additive to avoid",        // with one moderate additive
+      "Contains additives to avoid", // with multiple moderate additives
+      "A risky additive",            // with one hazardous additive
+      "Contains risky additives",    // with multiple hazardous additives
+    ],
+    benchmarks_100g: [1, 9, 19, 99, 199, 999],
+    benchmarks_unit: '',
+    rates: [0, 0, 2, 2, 3, 3],
+  },
   // vegetables: {
   //   messages: [
   //     "Good source of vegetables.",
@@ -139,12 +155,3 @@ export const rateIndexColors = [
   "#F97316",    // High:      Orange
   "#B91C1C"     // Very High: Red
 ];
-
-export const USDAGovCodeToOFFOrgKeyword = {
-  "307": "sodium",
-  "539": "sugars",
-  "606": "saturated-fat",
-  "203": "proteins",
-  "291": "fiber",
-  "208": "energy-kcal",
-}

@@ -1,5 +1,6 @@
 import { NutrientBar } from "@/(app)/components";
 import { ProductNutrients } from "@prisma/client";
+import AdditivesBar from "./AdditivesBar";
 
 export default function NutrientBundle( {title, nutrients}: {title: string, nutrients: ProductNutrients[]} ) {
 
@@ -14,9 +15,10 @@ export default function NutrientBundle( {title, nutrients}: {title: string, nutr
       </div>
       <div>
         {nutrients.map((nutrient) => {
-          return (
-            <NutrientBar key={nutrient.id} nutrient={nutrient} />
-          );
+          if ( nutrient.nameKey === 'additives' )
+            return <AdditivesBar key={nutrient.id} nutrient={nutrient} />;
+          else
+            return <NutrientBar key={nutrient.id} nutrient={nutrient} />;
         })}
       </div>
     </>

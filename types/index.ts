@@ -34,3 +34,18 @@ export interface MetricProps {
   benchmarks_ratio?: number[];
   rates: number[],
 }
+
+export interface AdditiveProps {
+  number: string;
+  name: string;
+  // Risk Levels
+  // 0 = No Risk
+  // 1 = Limited Risk
+  // 2 = Moderate Risk
+  // 3 = Hazardous
+  risk: number;
+  description: string;
+  use: string;
+  riskTitle?: string;
+  color?: string;
+}

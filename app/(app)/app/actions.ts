@@ -1,6 +1,6 @@
 "use server";
 import { NutritionProps, NutrientProps } from "@/types";
-import { checkBarcodeFormat, convertMetric, getRateIndex, verifyNutrient } from "@/utils";
+import { checkBarcodeFormat, convertMetric, getAdditivesAmount, getRateIndex, verifyNutrient } from "@/utils";
 import { PrismaClient, ProductNutrients, Products } from "@prisma/client";
 
 
@@ -89,10 +89,16 @@ export async function checkProduct(barcode: string): Promise<Products | null>
       // Verify and get nutrient metric object
       let metric = verifyNutrient(nutrient);
       if ( metric === null ) return;
+
+      // ADDITIVES: If nutrient name is "additives" then do different things
+      if ( nutrient.name === "additives" ) {
+        nutrient.amount = getAdditivesAmount( nutrient.unitName.split(" "), metric );
+      }
   
       // Convert nutrient amount to match the benchmarks' unit
       nutrient.amount = convertMetric( nutrient.amount, nutrient.unitName, metric.benchmarks_unit );
-      nutrient.unitName = metric.benchmarks_unit;
+      if ( metric.benchmarks_unit !== '' )
+        nutrient.unitName = metric.benchmarks_unit;
   
       // Find the rate of nutrient amount
       nutrient.rate = metric.rates[ getRateIndex( nutrient.amount, metric ) ];
@@ -170,6 +176,9 @@ export async function createNutritionObjectFromOpenFoodFacts(json: any): Promise
   };
 
   try {
+    let additivesArray: string[] = getAdditives(json.additives_tags || []);
+    let additivesString: string = additivesArray.join(" ");
+
     const nutritionObject: NutritionProps = {
       id: json._id || "",
       image: json.image_url || "/no-image.webp",
@@ -180,7 +189,7 @@ export async function createNutritionObjectFromOpenFoodFacts(json: any): Promise
       servingSize: parseServingSize(json.serving_size || "")[0],
       servingSizeUnit: parseServingSize(json.serving_size || "")[1],
       packageWeight: "",
-      additives: getAdditives( json.additives_tags ),
+      additives: additivesArray,
       nutrients: [],
     };
 
@@ -198,6 +207,18 @@ export async function createNutritionObjectFromOpenFoodFacts(json: any): Promise
       }
     });
 
+    // Add additives to nutrients list if exists
+    if ( json.additives_tags !== undefined )
+    {
+      nutritionObject.nutrients.push({
+        id: ++nutrientsIdCounter,
+        name: "additives",
+        code: "",
+        amount: additivesArray.length,
+        unitName: additivesString,
+      });
+    }
+
     return nutritionObject;
   } catch (error) {
     console.error(error);
@@ -210,7 +231,7 @@ function getAdditives(additives: string[]): string[] {
   additives.forEach((a) => {
     if (a.startsWith('en:')) {
       a = a.replace('en:', '');
-      additivesList.push(a);
+      additivesList.push( a.toUpperCase() );
     }
   });
   return additivesList;

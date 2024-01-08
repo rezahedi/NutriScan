@@ -1,5 +1,6 @@
-import { MetricProps, NutrientProps } from '@/types';
+import { MetricProps, NutrientProps, AdditiveProps } from '@/types';
 import { nutrientMetrics, rateIndexColors } from '@/constants';
+import { additivesList, riskTitles } from '@/constants/additives';
 
 
 export const limitDecimalPlaces = (value: number, decimalLimit: number) : number => {
@@ -120,4 +121,49 @@ export const getBarPartsWidth = (metric: MetricProps) : string[] => {
 
 export const checkBarcodeFormat = (barcode: string) : boolean => {
   return /^\d{8,13}$/.test(barcode);
+}
+
+export const getAdditivesDetails = (additives: string[]) : AdditiveProps[] => {
+  const additivesWithInfo: AdditiveProps[] = [];
+  additives.forEach((eNumber) => {
+    let additiveInfo = additivesList.find((additiveObj) => additiveObj.number === eNumber );
+
+    if ( additiveInfo === undefined ) {
+      additivesWithInfo.push( {
+        number: eNumber,
+        name: 'Unknown',
+        risk: -1,
+        description: '',
+        use: '',
+        riskTitle: 'Unknown',
+        color: 'gray'
+      } );
+
+    } else {
+      additivesWithInfo.push( {
+        ...additiveInfo,
+        riskTitle: riskTitles[ additiveInfo.risk ],
+        color: rateIndexColors[ additiveInfo.risk ]
+      } );
+    }
+  });
+
+  additivesWithInfo.sort((a, b) => b.risk - a.risk);
+
+  return additivesWithInfo;
+}
+
+export const getAdditivesAmount = (additives: string[], metric: MetricProps) : number =>
+{
+  // Get additives info of each E number
+  const additivesWithInfo: AdditiveProps[] = getAdditivesDetails( additives );
+
+
+  // Multiply the risk to find the amount so that we can rate it by comparing it to the benchmarks
+  let points = 0;
+  points += additivesWithInfo.filter(a => a.risk === 3).length * 100; // 3 = Hazardous
+  points += additivesWithInfo.filter(a => a.risk === 2).length * 10;  // 2 = Moderate Risk
+  points += additivesWithInfo.filter(a => a.risk === 1).length;       // 1 = Limited Risk
+
+  return points;
 }
