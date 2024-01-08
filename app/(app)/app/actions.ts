@@ -1,6 +1,5 @@
 "use server";
 import { NutritionProps, NutrientProps } from "@/types";
-import { USDAGovCodeToOFFOrgKeyword } from "@/constants";
 import { checkBarcodeFormat, convertMetric, getRateIndex, verifyNutrient } from "@/utils";
 import { PrismaClient, ProductNutrients, Products } from "@prisma/client";
 
@@ -76,12 +75,8 @@ export async function checkProduct(barcode: string): Promise<Products | null>
     let newProduct: NutritionProps | null = null;
     newProduct = await fetchFromOpenFoodFacts(barcode);
 
-    // Fetch from USDA Gov. API
-    if(newProduct === null)
-      newProduct = await fetchFromUSDA(barcode);
-
     if( newProduct === null )
-      throw new Error("No result from USDA or OpenFoodFacts APIs.");
+      throw new Error("No result from OpenFoodFacts API.");
 
     // Analyze, rate and insert new product with all related nutrients into database
     let { nutrients } = newProduct;
@@ -201,57 +196,6 @@ export async function createNutritionObjectFromOpenFoodFacts(json: any): Promise
         });
       }
     });
-
-    return nutritionObject;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-export async function fetchFromUSDA(barcode: string): Promise<any> {
-  try {
-    if ( !process.env.USDA_API_KEY ) {
-      throw new Error('Missing env var for USDA API key: `USDA_API_KEY`');
-    }
-
-    const result = await fetch(
-      `https://api.nal.usda.gov/fdc/v1/foods/search?query=${barcode}&pageSize=1&api_key=${process.env.USDA_API_KEY}`
-    );
-    const data = await result.json();
-    if(data.foods.length === 0)
-      return null;
-
-    return createNutritionObjectFromUSDA( data.foods[0] );
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-}
-
-// Create a new nutrition object defined in @/Types from the JSON object returned by the USDA API
-export async function createNutritionObjectFromUSDA(json: any): Promise<NutritionProps | null> {
-  const createNutrient = (nutrient: any): NutrientProps => ({
-    id: parseInt(nutrient.nutrientId || ""),
-    name: USDAGovCodeToOFFOrgKeyword[ nutrient.nutrientNumber as keyof typeof USDAGovCodeToOFFOrgKeyword ] || nutrient.nutrientName || "",
-    code: nutrient.nutrientNumber || "",
-    amount: parseFloat(nutrient.value || ""),
-    unitName: nutrient.unitName || "",
-  });
-
-  try {
-    const nutritionObject: NutritionProps = {
-      id: json.fdcId || "",
-      image: "/no-image.webp",
-      name: json.description || "",
-      brandOwner: json.brandOwner || "",
-      brandName: json.brandName || "",
-      ingredients: json.ingredients || "",
-      servingSize: parseFloat(json.servingSize || ""),
-      servingSizeUnit: json.servingSizeUnit || "",
-      packageWeight: json.packageWeight || "",
-      nutrients: json.foodNutrients.map(createNutrient),
-    };
 
     return nutritionObject;
   } catch (error) {
