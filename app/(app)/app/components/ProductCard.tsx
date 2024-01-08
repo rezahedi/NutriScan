@@ -14,6 +14,10 @@ export default function ProductCard( {product, nutrients = []}: {product: Produc
     if ( nutrients.length === 0 ) return;
     if ( negativeNutrients !== null || positiveNutrients !== null ) return;
 
+    // If product rate was high, Sort nutrient's rate good to bad
+    if ( product.rated >= 70 )
+    nutrients.sort((a, b) => a.rated - b.rated);
+
     // 3. Separate negatives and positives (positive to negative => 0, 1, 2, 3)
     setnegativeNutrients( nutrients.filter((nutrient) => nutrient.rated >= 2) );
     setpositiveNutrients( nutrients.filter((nutrient) => nutrient.rated < 2) );
@@ -42,10 +46,17 @@ export default function ProductCard( {product, nutrients = []}: {product: Produc
         </div>
       </div>
       {nutrients.length > 0 && (
-        <>
-          {negativeNutrients && <NutrientBundle title='Negatives' nutrients={negativeNutrients} />}
-          {positiveNutrients && <NutrientBundle title='Positives' nutrients={positiveNutrients} />}
-        </>
+        ((product.rated < 70) ?
+          <>
+            {negativeNutrients && <NutrientBundle title='Negatives' nutrients={negativeNutrients} />}
+            {positiveNutrients && <NutrientBundle title='Positives' nutrients={positiveNutrients} />}
+          </>
+          :
+          <>
+            {positiveNutrients && <NutrientBundle title='Positives' nutrients={positiveNutrients} />}
+            {negativeNutrients && <NutrientBundle title='Negatives' nutrients={negativeNutrients} />}
+          </>
+        )
       )}
     </>
   )
