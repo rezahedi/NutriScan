@@ -36,7 +36,7 @@ export default function ProductCard( {product, nutrients = []}: {product: Produc
     <>
       <div className="flex gap-4 group">
         <div className='w-1/3 overflow-hidden rounded-xl'>
-          <Image src={product.image || `/no-image.webp`} alt={product.name} className='w-full h-full object-cover aspect-square group-hover:scale-105 transition-transform duration-300 transform' width="170" height="170" loading='lazy' />
+          <Image src={product.image || `/no-image.webp`} alt={product.name} className='w-full h-full object-contain bg-text aspect-square group-hover:scale-105 transition-transform duration-300 transform' width="170" height="170" loading='lazy' />
         </div>
         <div className='flex-1 flex flex-col gap-1'>
           <h3 className="font-normal group-hover:underline">{product.name}</h3>
