@@ -155,3 +155,17 @@ export const rateIndexColors = [
   "#F97316",    // High:      Orange
   "#B91C1C"     // Very High: Red
 ];
+
+export const productRateTags: string[] = [
+  "Excellent",
+  "Good",
+  "Bad",
+  "Poor"
+]
+
+export const productRateBenchmarks: number[] = [
+  85, // Excellent
+  70, // Good
+  60, // Bad
+  0   // Poor
+]

@@ -167,3 +167,28 @@ export const getAdditivesAmount = (additives: string[], metric: MetricProps) : n
 
   return points;
 }
+
+export const rateProduct = (nutrients: NutrientProps[]) : number => {
+  // 60 points for nutrients, 60 / nutrients.length and each nutrient rated based on benchmarks percentage not just the rate 0-3
+  // 30 points for additives
+  // 10 points for organic
+  // sum up all rate of nutrients
+  let sum = 0;
+  let count = 0;
+  nutrients.forEach((nutrient) => {
+    if( nutrient.name!=='additives' && nutrient.rate !== undefined ) {
+      sum += 3 - nutrient.rate;
+      count++;
+    }
+  });
+  sum = sum / count;
+  let nutrientPoints = sum * 70 / 3;
+  
+  sum = 3;
+  nutrients.find((nutrient) => {
+    if( nutrient.name==='additives' )
+      sum = 3 - nutrient.rate!;
+  });
+  let additivesPoints = sum * 30 / 3;
+  return Math.round( nutrientPoints + additivesPoints );
+}

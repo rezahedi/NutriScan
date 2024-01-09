@@ -1,6 +1,6 @@
 "use server";
 import { NutritionProps, NutrientProps } from "@/types";
-import { checkBarcodeFormat, convertMetric, getAdditivesAmount, getRateIndex, verifyNutrient } from "@/utils";
+import { checkBarcodeFormat, convertMetric, getAdditivesAmount, getRateIndex, rateProduct, verifyNutrient } from "@/utils";
 import { PrismaClient, ProductNutrients, Products } from "@prisma/client";
 
 
@@ -107,6 +107,8 @@ export async function checkProduct(barcode: string): Promise<Products | null>
     });
     newProduct.nutrients = ratedNutrients;
 
+    let productRate = rateProduct(ratedNutrients);
+
     const prisma = new PrismaClient();
     let res = await prisma.products.create({
       data: {
@@ -119,7 +121,7 @@ export async function checkProduct(barcode: string): Promise<Products | null>
         servingSize: newProduct.servingSize,
         servingUnit: newProduct.servingSizeUnit,
         packageWeight: newProduct.packageWeight,
-        rated: 0,
+        rated: productRate,
         nutrients: {
           create: newProduct.nutrients.map((nutrient) => {
             return {

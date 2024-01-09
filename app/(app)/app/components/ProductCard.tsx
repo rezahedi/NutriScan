@@ -4,13 +4,21 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image'
 import NutrientBundle from './NutrientBundle';
 import { ProductNutrients, Products } from '@prisma/client';
+import { productRateBenchmarks, productRateTags, rateIndexColors } from '@/constants';
 
 export default function ProductCard( {product, nutrients = []}: {product: Products, nutrients?: ProductNutrients[]} ) {
 
   const [negativeNutrients, setnegativeNutrients] = useState<ProductNutrients[] | null>(null);
   const [positiveNutrients, setpositiveNutrients] = useState<ProductNutrients[] | null>(null);
+  const [productRate, setProductRate] = useState<{tag:string, color:string} | null>(null);
 
   useEffect(() => {
+    let productRateIndex = productRateBenchmarks.findIndex((benchmark) => product.rated >= benchmark);
+    setProductRate({
+      tag: productRateTags[ productRateIndex ],
+      color: rateIndexColors[ productRateIndex ]
+    });
+
     if ( nutrients.length === 0 ) return;
     if ( negativeNutrients !== null || positiveNutrients !== null ) return;
 
@@ -38,10 +46,13 @@ export default function ProductCard( {product, nutrients = []}: {product: Produc
             <p className='pt-1 font-light text-xs'><b>Serving Size:</b> {product.servingSize}{product.servingUnit}</p>}
           {product.ingredients && <p className='pt-2 text-xs text-text-2 line-clamp-2 lowercase'>{product.ingredients}</p>}
           <div className='flex items-center gap-2 text-sm pt-2'>
-            <div style={{
-                backgroundColor: `#84CC16`
-              }} className='rounded-2xl w-4 h-4'></div>
-            <p>Good <i>({product.rated}/100)</i></p>
+            {productRate &&
+            <>
+              <div style={{
+                  backgroundColor: productRate.color
+                }} className='rounded-2xl w-4 h-4'></div>
+              <p>{productRate.tag} <i>({product.rated}/100)</i></p>
+            </>}
           </div>
         </div>
       </div>
