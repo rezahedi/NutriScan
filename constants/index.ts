@@ -150,10 +150,10 @@ export const nutrientMetrics = {
 
 //! Whenever these colors are changed, also change them in tailwind config safelist!
 export const rateIndexColors = [
-  "#3F620D",    // Very low:  Dark Green
-  "#84CC16",    // Low:       Light Green
-  "#F97316",    // High:      Orange
-  "#B91C1C"     // Very High: Red
+  "#49a160",    // Very low:  Dark Green
+  "#30cc70",    // Low:       Light Green
+  "#e57e24",    // High:      Orange
+  "#ec4a3c"     // Very High: Red
 ];
 
 export const productRateTags: string[] = [
