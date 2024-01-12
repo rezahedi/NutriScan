@@ -81,9 +81,9 @@ export default function AdditivesBar({nutrient}: {nutrient: ProductNutrients}) {
             ))}
             {additivesDetail.length>0 &&
             <>
-              <button onClick={handleShowDetail} className='text-secondary hover:underline'>{!showDetail ? `Show more info` : `Show less`}</button>
+              <button onClick={handleShowDetail} className='text-secondary hover:underline text-sm'>{!showDetail ? `Show more info` : `Show less`}</button>
               {showDetail && (
-                <Suspense fallback={<>{additives.map((_, i) => i<2 && <AdditivesSkeleton key={i} />)}</>}>
+                <Suspense fallback={<AdditivesSkeleton />}>
                   <AdditivesDetail additives={additives} />
                 </Suspense>
               )}

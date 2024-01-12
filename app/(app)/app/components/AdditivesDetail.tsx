@@ -7,9 +7,9 @@ async function AdditivesDetail({additives}: {additives: string[]}) {
   const additivesDetail: AdditiveProps[] = await getAdditivesDetails(additives);
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
       {additivesDetail.map((additive, index) => (
-        <div key={index} className='flex flex-col gap-2 text-sm'>
+        <div key={index} className='flex flex-col gap-1 text-sm'>
           {additive.risk !== -1 && <>
             <div className="flex gap-2 items-center">
               <span style={{
@@ -22,7 +22,7 @@ async function AdditivesDetail({additives}: {additives: string[]}) {
           </>}
         </div>
       ))}
-    </>
+    </div>
   )
 }
 
