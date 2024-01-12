@@ -40,3 +40,20 @@ export function NutrientSkeleton() {
     </SkeletonTheme>
   )
 }
+
+export function AdditivesSkeleton() {
+  return (
+    <SkeletonTheme baseColor="#202020" highlightColor="#4444445c">
+      <div className='flex flex-col gap-2 text-sm'>
+        <div className="flex gap-2 items-center">
+          <Skeleton circle count={1} width={18} height={18} />
+          <Skeleton count={1} width={100} height={18} />
+        </div>
+        <Skeleton count={1} width={`100%`} />
+        <Skeleton count={1} width={`80%`} />
+        <Skeleton count={1} width={`60%`} />
+        <Skeleton count={1} width={`70%`} />
+      </div>
+    </SkeletonTheme>
+  )
+}

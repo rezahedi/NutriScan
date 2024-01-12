@@ -3,8 +3,14 @@ import { AdditiveProps } from '@/types'
 import { getAdditivesDetails, getBarUIDetails, getMetric, getRateIndex } from '@/utils'
 import { Back } from '@/(app)/components';
 import { ProductNutrients } from '@prisma/client';
+import { Suspense, useState } from 'react';
+import AdditivesDetail from './AdditivesDetail';
+import { AdditivesSkeleton } from './skeleton';
 
 export default function AdditivesBar({nutrient}: {nutrient: ProductNutrients}) {
+
+  const [status, setStatus] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
 
   const { amount } = nutrient;
   const additives = nutrient.unitName!=='' ? nutrient.unitName.split(' ') : [];
@@ -27,9 +33,18 @@ export default function AdditivesBar({nutrient}: {nutrient: ProductNutrients}) {
     barIcon.classList.toggle('rotate-90');
     barChart.classList.toggle('h-0');
     barChart.classList.toggle('h-auto');
+    setStatus(!status);
+    setShowDetail(false);
+  }
+
+  const handleShowDetail = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setShowDetail(!showDetail);
   }
 
   let additiveCount = additives.length;
+
+  //! TODO: This should be on AdditivesDetail component
   const additivesDetail: AdditiveProps[] = getAdditivesDetails(additives);
 
   return (
@@ -38,9 +53,9 @@ export default function AdditivesBar({nutrient}: {nutrient: ProductNutrients}) {
       <Image
         src='/additives.png' alt='Additives'
         className='w-6 pt-2'
-        width="24" height="24" />
+        width="32" height="32" />
       </div>
-      <div className="flex flex-col gap-2 grow">
+      <div className="flex-1 flex flex-col gap-2">
         <div className="flex flex-row justify-between">
           <div className='flex flex-col'>
             <p className="text-sm">{additiveCount ? 'Additives' : 'No additives'}</p>
@@ -57,13 +72,22 @@ export default function AdditivesBar({nutrient}: {nutrient: ProductNutrients}) {
         <div className='barChart h-0 -mx-2 px-2 overflow-hidden transition-[height] ease-in-out delay-50'>
           <div className='flex flex-col gap-1'>
             {additivesDetail.map((info, index) => (
-              <div key={index} className='flex gap-2 text-sm'>
+              <div key={index} className='flex gap-2 items-center text-sm'>
                 <div style={{
                   backgroundColor: `${info.color}`
                 }} className='rounded-2xl w-4 h-4'></div>
                 {info.number}: {info.riskTitle}
               </div>
             ))}
+            {additivesDetail.length>0 &&
+            <>
+              <button onClick={handleShowDetail} className='text-secondary hover:underline'>{!showDetail ? `Show more info` : `Show less`}</button>
+              {showDetail && (
+                <Suspense fallback={<>{additives.map((_, i) => i<2 && <AdditivesSkeleton key={i} />)}</>}>
+                  <AdditivesDetail additives={additives} />
+                </Suspense>
+              )}
+            </>}
           </div>
         </div>
       </div>

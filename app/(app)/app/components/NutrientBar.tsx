@@ -42,7 +42,7 @@ export default function NutrientBar({nutrient}: {nutrient: ProductNutrients}) {
         src={ metric.img }
         alt={ metric.name }
         className='w-6 pt-2'
-        width="24" height="24" />
+        width="32" height="32" />
       </div>
       <div className="flex flex-col gap-2 grow">
         <div className="flex flex-row justify-between">
